@@ -1,0 +1,29 @@
+/** Navbar */
+.search-result {
+	position: absolute;
+	border: 1px solid #b6b6b6;
+	top: 50px;
+	width: 450px;
+	z-index: 1000;
+	overflow: auto;
+	max-height: 370px;
+}
+.search-result::-webkit-scrollbar {
+	width: 6px;
+	border-radius: 10px;
+}
+.search-result::-webkit-scrollbar-track {
+	background: #0000001c;
+	border-radius: 10px;
+}
+.search-result::-webkit-scrollbar-thumb {
+	background: #2a4effa1;
+	border-radius: 10px;
+}
+.input-loading {
+	background-color: #ffffff;
+	background-image: url("http://loadinggif.com/images/image-selection/3.gif");
+	background-size: 20px 20px;
+	background-position: 98% center;
+	background-repeat: no-repeat;
+}
