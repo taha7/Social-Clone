@@ -10,10 +10,13 @@ const expectedPostsReducer = (state = initialeState, action) => {
 				posts: action.payload
 			};
 		case 'CREATE_POST':
-			return {
-				...state,
-				posts: state.posts.concat(action.payload)
-			};
+			const updatedState = jQuery.extend(true, {}, state);
+			updatedState.posts.unshift(action.payload);
+			return updatedState;
+		// return {
+		// 	...state,
+		// 	posts: state.posts.reverse().concat(action.payload).reverse()
+		// };
 		default:
 			return state;
 	}

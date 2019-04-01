@@ -1,5 +1,4 @@
 import React from 'react';
-
 const CreatePost = (props) => (
 	<div className='card' style={{ marginBottom: '5px' }}>
 		<div className='card-header'>Create Post</div>
@@ -9,7 +8,7 @@ const CreatePost = (props) => (
 				onChange={props.changed}
 				style={styles.createPost}
 				placeholder='What&#39;s on your mind'
-				rows='4'
+				rows='3'
 			/>
 		</div>
 		<div className='form-group text-center'>

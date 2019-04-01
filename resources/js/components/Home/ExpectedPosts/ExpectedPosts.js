@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import SweetAlert from 'react-bootstrap-sweetalert';
 
 import ExpectedPost from './ExpectedPost/ExpectedPost';
 import mapDispatchToProps from '../../../actions/HomeActions/ExpectedPostsActions';
@@ -12,11 +13,13 @@ class ExpectedPosts extends Component {
 		this.state = {
 			post: {
 				body: ''
-			}
+			},
+			alert: null
 		};
 
 		this.onChange = this.onChange.bind(this);
 		this.createPost = this.createPost.bind(this);
+		this.hideAlert = this.hideAlert.bind(this);
 	}
 
 	componentDidMount() {
@@ -35,14 +38,22 @@ class ExpectedPosts extends Component {
 	createPost(post) {
 		this.props.createExpectedPost(post);
 
+		const alert = <SweetAlert timeout={3000} title='Here&#39;s a message!' onConfirm={this.hideAlert} />;
 		this.setState({
-			post: { body: '' }
+			alert: alert
+		});
+	}
+
+	hideAlert() {
+		this.setState({
+			alert: null
 		});
 	}
 
 	render() {
 		return (
 			<div className='col-md-4'>
+				{this.state.alert}
 				<CreatePost
 					changed={this.onChange}
 					postCreated={() => this.createPost(this.state.post)}
