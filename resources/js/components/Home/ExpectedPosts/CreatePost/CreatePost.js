@@ -5,6 +5,7 @@ const CreatePost = (props) => (
 		<div className='card-body d-flex' style={styles.textareaCard}>
 			<textarea
 				name='body'
+				value={props.post.body}
 				onChange={props.changed}
 				style={styles.createPost}
 				placeholder='What&#39;s on your mind'

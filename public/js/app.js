@@ -65451,11 +65451,23 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
       });
     },
     createExpectedPost: function createExpectedPost(post) {
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post(laroute.route('posts.store'), post).then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post(laroute.route('posts.store'), post).then(function (_ref) {
+        var data = _ref.data;
         dispatch({
           type: 'CREATE_POST',
-          payload: response.data.post
+          payload: data.post
         });
+      });
+    },
+    onChangeInput: function onChangeInput(e) {
+      return dispatch({
+        type: 'CHANGE_INPUT',
+        event: e
+      });
+    },
+    onHideAlert: function onHideAlert() {
+      return dispatch({
+        type: 'HIDE_ALERT'
       });
     }
   };
@@ -65577,6 +65589,7 @@ var CreatePost = function CreatePost(props) {
     style: styles.textareaCard
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("textarea", {
     name: "body",
+    value: props.post.body,
     onChange: props.changed,
     style: styles.createPost,
     placeholder: "What's on your mind",
@@ -65697,8 +65710,7 @@ function (_Component) {
     _this.state = {
       post: {
         body: ''
-      },
-      alert: null
+      }
     };
     _this.onChange = _this.onChange.bind(_assertThisInitialized(_this));
     _this.createPost = _this.createPost.bind(_assertThisInitialized(_this));
@@ -65714,45 +65726,48 @@ function (_Component) {
   }, {
     key: "onChange",
     value: function onChange(e) {
-      var post = jQuery.extend(true, {}, this.state.post);
-      post[e.target.name] = e.target.value;
-      this.setState({
-        post: post
-      });
+      this.props.onChangeInput(e); // const post = jQuery.extend(true, {}, this.state.post);
+      // post[e.target.name] = e.target.value;
+      // this.setState({
+      // 	post
+      // });
     }
   }, {
     key: "createPost",
     value: function createPost(post) {
       this.props.createExpectedPost(post);
-      var alert = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_sweetalert__WEBPACK_IMPORTED_MODULE_2___default.a, {
-        timeout: 3000,
-        title: "Here's a message!",
-        onConfirm: this.hideAlert
-      });
-      this.setState({
-        alert: alert
-      });
     }
   }, {
     key: "hideAlert",
     value: function hideAlert() {
-      this.setState({
-        alert: null
-      });
+      this.props.onHideAlert();
     }
   }, {
     key: "render",
     value: function render() {
       var _this2 = this;
 
+      var alert = null;
+
+      if (this.props.isPostCreated) {
+        alert = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_sweetalert__WEBPACK_IMPORTED_MODULE_2___default.a, {
+          success: true,
+          timeout: 2000,
+          title: "The post has been published",
+          onConfirm: this.hideAlert
+        });
+      } else {
+        alert = null;
+      }
+
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col-md-4"
-      }, this.state.alert, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_CreatePost_CreatePost__WEBPACK_IMPORTED_MODULE_5__["default"], {
+        className: "col-md-5"
+      }, alert, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_CreatePost_CreatePost__WEBPACK_IMPORTED_MODULE_5__["default"], {
         changed: this.onChange,
         postCreated: function postCreated() {
-          return _this2.createPost(_this2.state.post);
+          return _this2.createPost(_this2.props.newPost);
         },
-        post: this.state.post
+        post: this.props.newPost
       }), this.props.posts.map(function (post) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_ExpectedPost_ExpectedPost__WEBPACK_IMPORTED_MODULE_3__["default"], {
           key: post.id,
@@ -65767,7 +65782,9 @@ function (_Component) {
 
 var mapStateToProps = function mapStateToProps(state) {
   return {
-    posts: state.ExpectedPostsReducer.posts
+    posts: state.ExpectedPostsReducer.posts,
+    newPost: state.ExpectedPostsReducer.newPost,
+    isPostCreated: state.ExpectedPostsReducer.postCreated
   };
 };
 
@@ -65848,7 +65865,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var UserSideMenu = function UserSideMenu() {
   return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-3"
+    className: "col-md-2"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "card"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -66746,7 +66763,11 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var initialeState = {
-  posts: []
+  posts: [],
+  newPost: {
+    body: ''
+  },
+  postCreated: false
 };
 
 var expectedPostsReducer = function expectedPostsReducer() {
@@ -66762,11 +66783,21 @@ var expectedPostsReducer = function expectedPostsReducer() {
     case 'CREATE_POST':
       var updatedState = jQuery.extend(true, {}, state);
       updatedState.posts.unshift(action.payload);
+      updatedState.newPost = {
+        body: ''
+      };
+      updatedState.postCreated = true;
       return updatedState;
-    // return {
-    // 	...state,
-    // 	posts: state.posts.reverse().concat(action.payload).reverse()
-    // };
+
+    case 'CHANGE_INPUT':
+      return _objectSpread({}, state, {
+        newPost: _defineProperty({}, action.event.target.name, action.event.target.value)
+      });
+
+    case 'HIDE_ALERT':
+      return _objectSpread({}, state, {
+        postCreated: false
+      });
 
     default:
       return state;

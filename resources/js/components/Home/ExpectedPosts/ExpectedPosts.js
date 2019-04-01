@@ -13,8 +13,7 @@ class ExpectedPosts extends Component {
 		this.state = {
 			post: {
 				body: ''
-			},
-			alert: null
+			}
 		};
 
 		this.onChange = this.onChange.bind(this);
@@ -27,37 +26,40 @@ class ExpectedPosts extends Component {
 	}
 
 	onChange(e) {
-		const post = jQuery.extend(true, {}, this.state.post);
-		post[e.target.name] = e.target.value;
+		this.props.onChangeInput(e);
+		// const post = jQuery.extend(true, {}, this.state.post);
+		// post[e.target.name] = e.target.value;
 
-		this.setState({
-			post
-		});
+		// this.setState({
+		// 	post
+		// });
 	}
 
 	createPost(post) {
 		this.props.createExpectedPost(post);
-
-		const alert = <SweetAlert timeout={3000} title='Here&#39;s a message!' onConfirm={this.hideAlert} />;
-		this.setState({
-			alert: alert
-		});
 	}
 
 	hideAlert() {
-		this.setState({
-			alert: null
-		});
+		this.props.onHideAlert();
 	}
 
 	render() {
+		let alert = null;
+		if (this.props.isPostCreated) {
+			alert = (
+				<SweetAlert success timeout={2000} title='The post has been published' onConfirm={this.hideAlert} />
+			);
+		} else {
+			alert = null;
+		}
+
 		return (
-			<div className='col-md-4'>
-				{this.state.alert}
+			<div className='col-md-5'>
+				{alert}
 				<CreatePost
 					changed={this.onChange}
-					postCreated={() => this.createPost(this.state.post)}
-					post={this.state.post}
+					postCreated={() => this.createPost(this.props.newPost)}
+					post={this.props.newPost}
 				/>
 				{this.props.posts.map((post) => <ExpectedPost key={post.id} post={post} />)}
 			</div>
@@ -67,7 +69,9 @@ class ExpectedPosts extends Component {
 
 const mapStateToProps = (state) => {
 	return {
-		posts: state.ExpectedPostsReducer.posts
+		posts: state.ExpectedPostsReducer.posts,
+		newPost: state.ExpectedPostsReducer.newPost,
+		isPostCreated: state.ExpectedPostsReducer.postCreated
 	};
 };
 

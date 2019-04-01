@@ -11,13 +11,15 @@ const mapDispatchToProps = (dispatch) => {
 			});
 		},
 		createExpectedPost: (post) => {
-			axios.post(laroute.route('posts.store'), post).then((response) => {
+			axios.post(laroute.route('posts.store'), post).then(({ data }) => {
 				dispatch({
 					type: 'CREATE_POST',
-					payload: response.data.post
+					payload: data.post
 				});
 			});
-		}
+		},
+		onChangeInput: (e) => dispatch({ type: 'CHANGE_INPUT', event: e }),
+		onHideAlert: () => dispatch({ type: 'HIDE_ALERT' })
 	};
 };
 

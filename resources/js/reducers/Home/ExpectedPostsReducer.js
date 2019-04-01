@@ -1,5 +1,9 @@
 const initialeState = {
-	posts: []
+	posts: [],
+	newPost: {
+		body: ''
+	},
+	postCreated: false
 };
 
 const expectedPostsReducer = (state = initialeState, action) => {
@@ -12,11 +16,21 @@ const expectedPostsReducer = (state = initialeState, action) => {
 		case 'CREATE_POST':
 			const updatedState = jQuery.extend(true, {}, state);
 			updatedState.posts.unshift(action.payload);
+			updatedState.newPost = { body: '' };
+			updatedState.postCreated = true;
 			return updatedState;
-		// return {
-		// 	...state,
-		// 	posts: state.posts.reverse().concat(action.payload).reverse()
-		// };
+		case 'CHANGE_INPUT':
+			return {
+				...state,
+				newPost: {
+					[action.event.target.name]: action.event.target.value
+				}
+			};
+		case 'HIDE_ALERT':
+			return {
+				...state,
+				postCreated: false
+			};
 		default:
 			return state;
 	}
