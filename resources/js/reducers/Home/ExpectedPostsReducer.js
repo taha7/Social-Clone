@@ -14,11 +14,12 @@ const expectedPostsReducer = (state = initialeState, action) => {
 				posts: action.payload
 			};
 		case 'CREATE_POST':
-			const updatedState = jQuery.extend(true, {}, state);
-			updatedState.posts.unshift(action.payload);
-			updatedState.newPost = { body: '' };
-			updatedState.postCreated = true;
-			return updatedState;
+			return {
+				...state,
+				posts: [ action.payload ].concat(state.posts),
+				newPost: { body: '' },
+				postCreated: true
+			};
 		case 'CHANGE_INPUT':
 			return {
 				...state,

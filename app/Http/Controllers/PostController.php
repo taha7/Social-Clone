@@ -11,12 +11,11 @@ class PostController extends Controller
     //
     public function index()
     {
-        $posts = Post::latest()->limit(10)->get();
-        foreach ($posts as $post) {
-            $post->user;
-        }
+        $posts = Post::with('user')->latest()->limit(10)->get();
+        
         return response()->json([
-            "data" => $posts,
+            "status" => true,
+            "posts" => $posts,
         ], 200);
     }
 

@@ -65443,20 +65443,25 @@ __webpack_require__.r(__webpack_exports__);
 var mapDispatchToProps = function mapDispatchToProps(dispatch) {
   return {
     loadExpectedPosts: function loadExpectedPosts() {
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(laroute.route('posts.index')).then(function (response) {
-        dispatch({
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(laroute.route('posts.index')).then(function (_ref) {
+        var data = _ref.data;
+        return dispatch({
           type: 'LOAD_POSTS',
-          payload: response.data.data
+          payload: data.posts
         });
+      }).catch(function (error) {
+        return console.log(error);
       });
     },
     createExpectedPost: function createExpectedPost(post) {
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post(laroute.route('posts.store'), post).then(function (_ref) {
-        var data = _ref.data;
-        dispatch({
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post(laroute.route('posts.store'), post).then(function (_ref2) {
+        var data = _ref2.data;
+        return dispatch({
           type: 'CREATE_POST',
           payload: data.post
         });
+      }).catch(function (error) {
+        return console.log(error);
       });
     },
     onChangeInput: function onChangeInput(e) {
@@ -65681,9 +65686,9 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
 
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
@@ -65701,71 +65706,47 @@ var ExpectedPosts =
 function (_Component) {
   _inherits(ExpectedPosts, _Component);
 
-  function ExpectedPosts(props) {
-    var _this;
-
+  function ExpectedPosts() {
     _classCallCheck(this, ExpectedPosts);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(ExpectedPosts).call(this, props));
-    _this.state = {
-      post: {
-        body: ''
-      }
-    };
-    _this.onChange = _this.onChange.bind(_assertThisInitialized(_this));
-    _this.createPost = _this.createPost.bind(_assertThisInitialized(_this));
-    _this.hideAlert = _this.hideAlert.bind(_assertThisInitialized(_this));
-    return _this;
+    return _possibleConstructorReturn(this, _getPrototypeOf(ExpectedPosts).apply(this, arguments));
   }
 
   _createClass(ExpectedPosts, [{
     key: "componentDidMount",
     value: function componentDidMount() {
+      /** @description load all expects posts */
       this.props.loadExpectedPosts();
     }
+    /** @description returns sweet alert */
+
   }, {
-    key: "onChange",
-    value: function onChange(e) {
-      this.props.onChangeInput(e); // const post = jQuery.extend(true, {}, this.state.post);
-      // post[e.target.name] = e.target.value;
-      // this.setState({
-      // 	post
-      // });
-    }
-  }, {
-    key: "createPost",
-    value: function createPost(post) {
-      this.props.createExpectedPost(post);
-    }
-  }, {
-    key: "hideAlert",
-    value: function hideAlert() {
-      this.props.onHideAlert();
+    key: "renderAlert",
+    value: function renderAlert() {
+      var _this = this;
+
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_sweetalert__WEBPACK_IMPORTED_MODULE_2___default.a, {
+        success: true,
+        timeout: 2000,
+        title: "The post has been published",
+        onConfirm: function onConfirm() {
+          return _this.props.onHideAlert();
+        }
+      });
     }
   }, {
     key: "render",
     value: function render() {
       var _this2 = this;
 
-      var alert = null;
-
-      if (this.props.isPostCreated) {
-        alert = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_sweetalert__WEBPACK_IMPORTED_MODULE_2___default.a, {
-          success: true,
-          timeout: 2000,
-          title: "The post has been published",
-          onConfirm: this.hideAlert
-        });
-      } else {
-        alert = null;
-      }
-
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "col-md-5"
-      }, alert, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_CreatePost_CreatePost__WEBPACK_IMPORTED_MODULE_5__["default"], {
-        changed: this.onChange,
+      }, this.props.isPostCreated ? this.renderAlert() : null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_CreatePost_CreatePost__WEBPACK_IMPORTED_MODULE_5__["default"], {
+        changed: function changed(e) {
+          return _this2.props.onChangeInput(e);
+        },
         postCreated: function postCreated() {
-          return _this2.createPost(_this2.props.newPost);
+          return _this2.props.createExpectedPost(_this2.props.newPost);
         },
         post: this.props.newPost
       }), this.props.posts.map(function (post) {
@@ -66781,13 +66762,13 @@ var expectedPostsReducer = function expectedPostsReducer() {
       });
 
     case 'CREATE_POST':
-      var updatedState = jQuery.extend(true, {}, state);
-      updatedState.posts.unshift(action.payload);
-      updatedState.newPost = {
-        body: ''
-      };
-      updatedState.postCreated = true;
-      return updatedState;
+      return _objectSpread({}, state, {
+        posts: [action.payload].concat(state.posts),
+        newPost: {
+          body: ''
+        },
+        postCreated: true
+      });
 
     case 'CHANGE_INPUT':
       return _objectSpread({}, state, {
