@@ -11,11 +11,12 @@ class PostController extends Controller
     //
     public function index()
     {
-        $posts = Post::with('user')->latest()->limit(10)->get();
+        // $posts = Post::with('user')->latest()->limit(10)->get();
+        $posts = Post::with('user')->latest()->paginate(10);
         
         return response()->json([
             "status" => true,
-            "posts" => $posts,
+            "paginatedPosts" => $posts,
         ], 200);
     }
 

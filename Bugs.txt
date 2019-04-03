@@ -1,1 +1,2 @@
-email hangs when key pressed on it's input for a while
+* email hangs when key pressed on it's input for a while
+* change load posts reducer to have one one object (paginatedPosts)

@@ -34,9 +34,21 @@ class ExpectedPosts extends Component {
 					changed={(e) => this.props.onChangeInput(e)}
 					postCreated={() => this.props.createExpectedPost(this.props.newPost)}
 					post={this.props.newPost}
+					errors={this.props.errors}
 				/>
 				{/* all expected posts */}
 				{this.props.posts.map((post) => <ExpectedPost key={post.id} post={post} />)}
+
+				<div className='card' style={{ marginBottom: '5px' }}>
+					<div className='card-body'>
+						<a
+							onClick={() => this.props.loadMorePosts(this.props.paginatedPosts.current_page)}
+							href='javascript:0'
+						>
+							Load More...
+						</a>
+					</div>
+				</div>
 			</div>
 		);
 	}
@@ -45,7 +57,9 @@ class ExpectedPosts extends Component {
 const mapStateToProps = (state) => {
 	return {
 		posts: state.ExpectedPostsReducer.posts,
+		paginatedPosts: state.ExpectedPostsReducer.paginatedPosts,
 		newPost: state.ExpectedPostsReducer.newPost,
+		errors: state.ExpectedPostsReducer.errors,
 		isPostCreated: state.ExpectedPostsReducer.postCreated
 	};
 };

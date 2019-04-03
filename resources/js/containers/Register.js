@@ -71,7 +71,6 @@ export default class Register extends Component {
 		let errors = new Validation(this.state.user, rules);
 
 		if (Object.keys(errors).length > 0) {
-			console.log('I am catching it');
 			this.setState({
 				errors
 			});
@@ -88,8 +87,8 @@ export default class Register extends Component {
 						});
 					}
 				})
-				.catch((response) => {
-					console.log(response);
+				.catch((error) => {
+					console.log(error);
 				});
 		}
 	}
