@@ -10,6 +10,7 @@ class ExpectedPosts extends Component {
 	componentDidMount() {
 		/** @description load all expects posts */
 		this.props.loadExpectedPosts();
+		this.props.getAuth();
 	}
 
 	/** @description returns sweet alert */
@@ -37,7 +38,14 @@ class ExpectedPosts extends Component {
 					errors={this.props.errors}
 				/>
 				{/* all expected posts */}
-				{this.props.posts.map((post) => <ExpectedPost key={post.id} post={post} />)}
+				{this.props.paginatedPosts.data.map((post) => (
+					<ExpectedPost
+						key={post.id}
+						auth={this.props.auth}
+						post={post}
+						deletePost={() => this.props.deleteExpectedPost(post.id)}
+					/>
+				))}
 
 				<div className='card' style={{ marginBottom: '5px' }}>
 					<div className='card-body'>
@@ -56,7 +64,7 @@ class ExpectedPosts extends Component {
 
 const mapStateToProps = (state) => {
 	return {
-		posts: state.ExpectedPostsReducer.posts,
+		auth: state.ExpectedPostsReducer.auth,
 		paginatedPosts: state.ExpectedPostsReducer.paginatedPosts,
 		newPost: state.ExpectedPostsReducer.newPost,
 		errors: state.ExpectedPostsReducer.errors,

@@ -83049,21 +83049,29 @@ __webpack_require__.r(__webpack_exports__);
 
 var mapDispatchToProps = function mapDispatchToProps(dispatch) {
   return {
-    loadExpectedPosts: function loadExpectedPosts() {
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(laroute.route('posts.index') + '?page=1').then(function (_ref) {
+    getAuth: function getAuth() {
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/auth').then(function (_ref) {
         var data = _ref.data;
+        return dispatch({
+          type: 'GET_AUTH',
+          payload: data.user
+        });
+      });
+    },
+    loadExpectedPosts: function loadExpectedPosts() {
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(laroute.route('posts.index') + '?page=1').then(function (_ref2) {
+        var data = _ref2.data;
         return dispatch({
           type: 'LOAD_POSTS',
           payload: data.paginatedPosts
         });
-      }) // .then(({ data }) => console.log(data.paginatedPosts))
-      .catch(function (error) {
+      }).catch(function (error) {
         return console.log(error);
       });
     },
     loadMorePosts: function loadMorePosts(currentPage) {
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(laroute.route('posts.index') + "?page=".concat(++currentPage)).then(function (_ref2) {
-        var data = _ref2.data;
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(laroute.route('posts.index') + "?page=".concat(++currentPage)).then(function (_ref3) {
+        var data = _ref3.data;
         return dispatch({
           type: 'MORE_POSTS',
           payload: data.paginatedPosts
@@ -83083,8 +83091,8 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
           payload: errors
         });
       } else {
-        axios__WEBPACK_IMPORTED_MODULE_0___default.a.post(laroute.route('posts.store'), post).then(function (_ref3) {
-          var data = _ref3.data;
+        axios__WEBPACK_IMPORTED_MODULE_0___default.a.post(laroute.route('posts.store'), post).then(function (_ref4) {
+          var data = _ref4.data;
           return dispatch({
             type: 'CREATE_POST',
             payload: data.post
@@ -83093,6 +83101,17 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
           return console.log(error);
         });
       }
+    },
+    deleteExpectedPost: function deleteExpectedPost(postId) {
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.delete(laroute.route('posts.delete', {
+        post: postId
+      })).then(function (_ref5) {
+        var data = _ref5.data;
+        return dispatch({
+          type: 'DELETE_POST',
+          payload: data.post
+        });
+      });
     },
     onChangeInput: function onChangeInput(e) {
       return dispatch({
@@ -83239,10 +83258,12 @@ var CreatePost = function CreatePost(props) {
   })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "form-group text-center"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-    className: "btn btn-success",
+    className: "btn btn-primary",
     style: styles.postButton,
     onClick: props.postCreated
-  }, "Post")));
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+    className: "far fa-share-square"
+  }), " Share")));
 };
 
 var styles = {
@@ -83250,7 +83271,7 @@ var styles = {
     padding: '5px 10px'
   },
   postButton: {
-    width: '80px'
+    width: '100px'
   }
 };
 /* harmony default export */ __webpack_exports__["default"] = (CreatePost);
@@ -83281,7 +83302,36 @@ var ExpectedPost = function ExpectedPost(props) {
     }
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "card-header"
-  }, props.post.user.name, " Said: ", moment__WEBPACK_IMPORTED_MODULE_1___default()(moment__WEBPACK_IMPORTED_MODULE_1___default()(props.post.created_at).format()).fromNow()), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "d-flex"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, props.post.user.name, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+    href: laroute.route('posts.show', {
+      post: props.post.id
+    }),
+    className: "ml-2"
+  }, moment__WEBPACK_IMPORTED_MODULE_1___default()(moment__WEBPACK_IMPORTED_MODULE_1___default()(props.post.created_at).format()).fromNow())), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "ml-auto"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "dropdown"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+    className: "btn dropdown-toggle",
+    type: "button",
+    id: "dropdownMenuButton",
+    "data-toggle": "dropdown",
+    "aria-haspopup": "true",
+    "aria-expanded": "false"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+    className: "fas fa-ellipsis-h"
+  })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "dropdown-menu",
+    "aria-labelledby": "dropdownMenuButton"
+  }, props.auth.id === props.post.user.id ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+    className: "dropdown-item",
+    href: "javascript:0",
+    onClick: props.deletePost
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+    className: "far fa-trash-alt"
+  }), " Delete Post") : null))))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "card-body"
   }, props.post.body));
 };
@@ -83348,6 +83398,7 @@ function (_Component) {
     value: function componentDidMount() {
       /** @description load all expects posts */
       this.props.loadExpectedPosts();
+      this.props.getAuth();
     }
     /** @description returns sweet alert */
 
@@ -83381,10 +83432,14 @@ function (_Component) {
         },
         post: this.props.newPost,
         errors: this.props.errors
-      }), this.props.posts.map(function (post) {
+      }), this.props.paginatedPosts.data.map(function (post) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_ExpectedPost_ExpectedPost__WEBPACK_IMPORTED_MODULE_3__["default"], {
           key: post.id,
-          post: post
+          auth: _this2.props.auth,
+          post: post,
+          deletePost: function deletePost() {
+            return _this2.props.deleteExpectedPost(post.id);
+          }
         });
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "card",
@@ -83407,7 +83462,7 @@ function (_Component) {
 
 var mapStateToProps = function mapStateToProps(state) {
   return {
-    posts: state.ExpectedPostsReducer.posts,
+    auth: state.ExpectedPostsReducer.auth,
     paginatedPosts: state.ExpectedPostsReducer.paginatedPosts,
     newPost: state.ExpectedPostsReducer.newPost,
     errors: state.ExpectedPostsReducer.errors,
@@ -84389,8 +84444,11 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var initialeState = {
-  posts: [],
-  paginatedPosts: {},
+  auth: {},
+  paginatedPosts: {
+    current_page: 0,
+    data: []
+  },
   newPost: {
     body: ''
   },
@@ -84405,21 +84463,27 @@ var expectedPostsReducer = function expectedPostsReducer() {
   var action = arguments.length > 1 ? arguments[1] : undefined;
 
   switch (action.type) {
+    case 'GET_AUTH':
+      return _objectSpread({}, state, {
+        auth: action.payload
+      });
+
     case 'LOAD_POSTS':
       return _objectSpread({}, state, {
-        paginatedPosts: action.payload,
-        posts: action.payload.data
+        paginatedPosts: action.payload
       });
 
     case 'MORE_POSTS':
+      action.payload.data = state.paginatedPosts.data.concat(action.payload.data);
       return _objectSpread({}, state, {
-        paginatedPosts: action.payload,
-        posts: state.posts.concat(action.payload.data)
+        paginatedPosts: action.payload
       });
 
     case 'CREATE_POST':
+      var newPosts = jQuery.extend(true, {}, state.paginatedPosts);
+      newPosts.data = [action.payload].concat(newPosts.data);
       return _objectSpread({}, state, {
-        posts: [action.payload].concat(state.posts),
+        paginatedPosts: newPosts,
         newPost: {
           body: ''
         },
@@ -84427,6 +84491,15 @@ var expectedPostsReducer = function expectedPostsReducer() {
         errors: {
           body: []
         }
+      });
+
+    case 'DELETE_POST':
+      var filteredPosts = jQuery.extend(true, {}, state.paginatedPosts);
+      filteredPosts.data = filteredPosts.data.filter(function (post) {
+        return post.id !== action.payload.id;
+      });
+      return _objectSpread({}, state, {
+        paginatedPosts: filteredPosts
       });
 
     case 'VALIDATION_ERROR':

@@ -33,4 +33,25 @@ class PostController extends Controller
             'post' => $post
         ]);
     }
+
+    public function destroy(Post $post)
+    {
+        if (!$post->exists) {
+            return response()->json([
+                'status' => false,
+                'data' => null,
+                'error' => "An error occured while deleting the post please try again"
+            ]);
+        }
+        $post->delete();
+        return response()->json([
+            'status' => true,
+            'post' => $post,
+        ]);
+    }
+
+    public function show(Post $post)
+    {
+        return view('posts.showPost', compact('post'));
+    }
 }

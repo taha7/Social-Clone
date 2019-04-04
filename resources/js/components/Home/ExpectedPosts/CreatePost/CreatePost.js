@@ -20,8 +20,8 @@ const CreatePost = (props) => {
 				/>
 			</div>
 			<div className='form-group text-center'>
-				<button className='btn btn-success' style={styles.postButton} onClick={props.postCreated}>
-					Post
+				<button className='btn btn-primary' style={styles.postButton} onClick={props.postCreated}>
+					<i className='far fa-share-square' /> Share
 				</button>
 			</div>
 		</div>
@@ -32,7 +32,7 @@ let styles = {
 		padding: '5px 10px'
 	},
 	postButton: {
-		width: '80px'
+		width: '100px'
 	}
 };
 export default CreatePost;

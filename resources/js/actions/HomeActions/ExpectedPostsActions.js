@@ -3,11 +3,13 @@ import Validation from '../../libraries/validation/validation';
 
 const mapDispatchToProps = (dispatch) => {
 	return {
+		getAuth: () => {
+			axios.get('/auth').then(({ data }) => dispatch({ type: 'GET_AUTH', payload: data.user }));
+		},
 		loadExpectedPosts: () => {
 			axios
 				.get(laroute.route('posts.index') + '?page=1')
 				.then(({ data }) => dispatch({ type: 'LOAD_POSTS', payload: data.paginatedPosts }))
-				// .then(({ data }) => console.log(data.paginatedPosts))
 				.catch((error) => console.log(error));
 		},
 		loadMorePosts: (currentPage) => {
@@ -29,6 +31,11 @@ const mapDispatchToProps = (dispatch) => {
 					.then(({ data }) => dispatch({ type: 'CREATE_POST', payload: data.post }))
 					.catch((error) => console.log(error));
 			}
+		},
+		deleteExpectedPost: (postId) => {
+			axios
+				.delete(laroute.route('posts.delete', { post: postId }))
+				.then(({ data }) => dispatch({ type: 'DELETE_POST', payload: data.post }));
 		},
 		onChangeInput: (e) => dispatch({ type: 'CHANGE_INPUT', event: e }),
 		onHideAlert: () => dispatch({ type: 'HIDE_ALERT' })

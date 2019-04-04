@@ -8,3 +8,7 @@
 	border-color: #2a4eff;
 	color: white;
 }
+
+.dropdown-toggle::after {
+    display:none;
+}

@@ -1,6 +1,9 @@
 const initialeState = {
-	posts: [],
-	paginatedPosts: {},
+	auth: {},
+	paginatedPosts: {
+		current_page: 0,
+		data: []
+	},
 	newPost: {
 		body: ''
 	},
@@ -12,27 +15,40 @@ const initialeState = {
 
 const expectedPostsReducer = (state = initialeState, action) => {
 	switch (action.type) {
+		case 'GET_AUTH':
+			return {
+				...state,
+				auth: action.payload
+			};
 		case 'LOAD_POSTS':
 			return {
 				...state,
-				paginatedPosts: action.payload,
-				posts: action.payload.data
+				paginatedPosts: action.payload
 			};
 		case 'MORE_POSTS':
+			action.payload.data = state.paginatedPosts.data.concat(action.payload.data);
 			return {
 				...state,
-				paginatedPosts: action.payload,
-				posts: state.posts.concat(action.payload.data)
+				paginatedPosts: action.payload
 			};
 		case 'CREATE_POST':
+			const newPosts = jQuery.extend(true, {}, state.paginatedPosts);
+			newPosts.data = [ action.payload ].concat(newPosts.data);
 			return {
 				...state,
-				posts: [ action.payload ].concat(state.posts),
+				paginatedPosts: newPosts,
 				newPost: { body: '' },
 				postCreated: true,
 				errors: {
 					body: []
 				}
+			};
+		case 'DELETE_POST':
+			const filteredPosts = jQuery.extend(true, {}, state.paginatedPosts);
+			filteredPosts.data = filteredPosts.data.filter((post) => post.id !== action.payload.id);
+			return {
+				...state,
+				paginatedPosts: filteredPosts
 			};
 		case 'VALIDATION_ERROR':
 			return {
