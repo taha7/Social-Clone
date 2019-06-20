@@ -46,22 +46,16 @@ export default class Register extends Component {
 		if (Object.keys(keyError).length > 0) {
 			let errors = { ...this.state.errors };
 			errors[e.target.name] = keyError[e.target.name] || [];
-			this.setState({
-				errors
-			});
-		} else {
+			this.setState({ errors });
+		}
+		else {
 			if (e.target.name === 'password' || e.target.name === 'passowrd_confirmation') {
 				let errors = { ...this.state.errors };
 				errors['password'] = [];
 				errors['password_confirmation'] = [];
-				this.setState({
-					errors
-				});
-			} else {
-				this.setState({
-					errors
-				});
+				this.setState({ errors });
 			}
+			else this.setState({ errors });
 		}
 	}
 
@@ -70,26 +64,15 @@ export default class Register extends Component {
 
 		let errors = new Validation(this.state.user, rules);
 
-		if (Object.keys(errors).length > 0) {
-			this.setState({
-				errors
-			});
-		} else {
+		if (Object.keys(errors).length > 0) this.setState({ errors });
+		else {
 			axios
 				.post(laroute.route('register'), { ...this.state.user })
-				.then((response) => {
-					if (response.data.status) {
-						// console.log(response.data);
-						window.location.href = response.data.url;
-					} else {
-						this.setState({
-							errors: response.data.errors
-						});
-					}
-				})
-				.catch((error) => {
-					console.log(error);
-				});
+				.then(
+					({ data }) =>
+						data.status ? (window.location.href = data.url) : this.setState({ errors: data.errors })
+				)
+				.catch(error => console.log(error));
 		}
 	}
 

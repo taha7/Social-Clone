@@ -84063,11 +84063,9 @@ function (_Component) {
           this.setState({
             errors: _errors2
           });
-        } else {
-          this.setState({
-            errors: errors
-          });
-        }
+        } else this.setState({
+          errors: errors
+        });
       }
     }
   }, {
@@ -84077,23 +84075,16 @@ function (_Component) {
 
       e.preventDefault();
       var errors = new _libraries_validation_validation__WEBPACK_IMPORTED_MODULE_3__["default"](this.state.user, rules);
-
-      if (Object.keys(errors).length > 0) {
-        this.setState({
-          errors: errors
-        });
-      } else {
-        axios.post(laroute.route('register'), _objectSpread({}, this.state.user)).then(function (response) {
-          if (response.data.status) {
-            // console.log(response.data);
-            window.location.href = response.data.url;
-          } else {
-            _this2.setState({
-              errors: response.data.errors
-            });
-          }
+      if (Object.keys(errors).length > 0) this.setState({
+        errors: errors
+      });else {
+        axios.post(laroute.route('register'), _objectSpread({}, this.state.user)).then(function (_ref2) {
+          var data = _ref2.data;
+          return data.status ? window.location.href = data.url : _this2.setState({
+            errors: data.errors
+          });
         }).catch(function (error) {
-          console.log(error);
+          return console.log(error);
         });
       }
     }
