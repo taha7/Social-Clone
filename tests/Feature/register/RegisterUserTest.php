@@ -8,15 +8,34 @@ use App\User;
 
 class RegisterUserTest extends TestCase
 {
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->user = factory(User::class)->raw([
+            'password' => '123456',
+            'password_confirmation' => '123456'
+        ]);
+    }
     /** @test */
     public function a_user_can_register_to_system()
     {
-        $user = factory(User::class)->raw();
-        $user['password_confirmation'] = $user['password'];
 
-        $this->post('/register/user', $user)
+        $this->post('/register/user', $this->user)
             ->assertRedirect('/home');
 
-        $this->assertDatabaseHas('users', ['name' => $user['name']]);
+        $this->assertDatabaseHas('users', ['name' => $this->user['name']]);
+    }
+
+    /** @test */
+    public function a_register_form_requires_inputs()
+    {
+        $requiredFields = ['name', 'email', 'password'];
+
+        foreach ($requiredFields as $field) {
+            $this->user["{$field}"] = null;
+            $this->post('/register/user', $this->user)->assertJsonValidationErrors(["{$field}"]);
+        }
     }
 }
