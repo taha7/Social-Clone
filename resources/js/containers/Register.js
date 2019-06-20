@@ -67,7 +67,7 @@ export default class Register extends Component {
 		if (Object.keys(errors).length > 0) this.setState({ errors });
 		else {
 			axios
-				.post(laroute.route('register'), { ...this.state.user })
+				.post(laroute.route('register-user'), { ...this.state.user })
 				.then(
 					({ data }) =>
 						data.status ? (window.location.href = data.url) : this.setState({ errors: data.errors })

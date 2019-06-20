@@ -6,6 +6,7 @@ Route::get('/', function () {
 
 Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
+Route::post('/register/user', 'Auth\RegisterController@registerUser')->name('register-user');
 
 Route::get('/users', 'UserController@index')->name('users.index');
 Route::get('/users/search/{key}', 'UserController@search')->name('users.search');
@@ -18,7 +19,7 @@ Route::delete('/posts/{post}', 'PostController@destroy')->name('posts.delete');
 Route::get('/posts/{post}', 'PostController@show')->name('posts.show');
 
 Route::get('/auth', function () {
-    return response()->json([ 'status' => true, 'user' => auth()->user() ?: null ]);
+    return response()->json(['status' => true, 'user' => auth()->user() ?: null]);
 });
 
 Route::get('/test', function () {
