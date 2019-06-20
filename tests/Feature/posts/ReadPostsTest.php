@@ -9,7 +9,6 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 class ReadPostsTest extends TestCase
 {
-    use DatabaseMigrations;
     /** @test */
     public function a_user_can_browse_all_posts()
     {

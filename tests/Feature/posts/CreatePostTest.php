@@ -9,7 +9,6 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 class CreatePostTest extends TestCase
 {
-    use DatabaseMigrations;
     /** @test */
     public function an_auth_can_create_a_post()
     {
