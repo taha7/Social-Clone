@@ -3,9 +3,6 @@ const CreatePost = (props) => {
 	const hasError = (prop) => {
 		return props.errors.hasOwnProperty(prop) && props.errors[prop].length > 0;
 	};
-	// const errorMess = (prop) => {
-	// 	return hasError(prop) ? props.errors[prop][0] : null;
-	// };
 	return (
 		<div className='card' style={{ marginBottom: '5px' }}>
 			<div className='card-header'>Create Post</div>
@@ -20,6 +17,7 @@ const CreatePost = (props) => {
 				/>
 			</div>
 			<div className='form-group text-center'>
+				<input id='image' type='file' name='image' />
 				<button className='btn btn-primary' style={styles.postButton} onClick={props.postCreated}>
 					<i className='far fa-share-square' /> Share
 				</button>

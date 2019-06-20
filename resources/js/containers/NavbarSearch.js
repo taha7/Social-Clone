@@ -19,39 +19,34 @@ export default class NavbarSearch extends Component {
 		this.handleSearchSesult = this.handleSearchSesult.bind(this);
 	}
 
-	handleFocus() {
-		this.setState({
-			resultLoading: true
+	componentDidMount() {
+		let myThis = this;
+		$(document).click(function({ target }) {
+			if (
+				!$(target).is('#search-result') &&
+				!$(target).parents().is('#search-result') &&
+				!$(target).is('#search-input')
+			) {
+				myThis.setState({ resultLoading: false });
+			}
 		});
+	}
 
-		if (this.state.users.length === 0) {
-			this.setState({
-				inputLoading: true
-			});
-			axios.get(laroute.route('users.index')).then((response) => {
-				this.setState({
-					users: response.data.users,
-					inputLoading: false
-				});
-			});
-		}
+	handleFocus() {
+		// Get Old results
+		this.setState({ resultLoading: true });
 	}
 
 	handleChange(e) {
 		let searched = e.target.value;
-		this.setState({
-			searched: searched
-		});
-
+		this.setState({ searched: searched, inputLoading: true });
 		if (searched.trim() !== '') {
-			const filteredUsers = this.state.users.filter((user) => {
-				return user.name.toString().includes(searched);
-			});
-
-			this.setState({
-				filteredUsers
-			});
+			axios
+				.get(laroute.route('users.search', { key: searched }))
+				.then(({ data }) => this.setState({ filteredUsers: data.users, inputLoading: false }))
+				.catch(errors => console.log(errors));
 		}
+		else this.setState({ inputLoading: false });
 	}
 
 	handleAddUser(friendId) {
@@ -61,37 +56,32 @@ export default class NavbarSearch extends Component {
 	}
 
 	handleSearchSesult() {
-		let loadedResults = null;
-
 		if (this.state.resultLoading) {
-			if (this.state.filteredUsers.length !== 0) {
-				loadedResults = <SearchResult addUser={this.handleAddUser} users={this.state.filteredUsers} />;
-			} else {
-				if (this.state.inputLoading) {
-					loadedResults = (
-						<SearchResult>
-							<div>loading...!</div>
-						</SearchResult>
-					);
-				} else {
-					if (this.state.searched.trim() === '') {
-						loadedResults = (
-							<SearchResult>
-								<div>Type Something</div>
-							</SearchResult>
-						);
-					} else {
-						loadedResults = (
-							<SearchResult>
-								<div>No Matched Result</div>
-							</SearchResult>
-						);
-					}
-				}
-			}
+			if (this.state.searched.trim() === '')
+				return (
+					<SearchResult>
+						<div>Type Something</div>
+					</SearchResult>
+				);
+
+			if (this.state.filteredUsers.length !== 0)
+				return <SearchResult addUser={this.handleAddUser} users={this.state.filteredUsers} />;
+
+			if (this.state.inputLoading)
+				return (
+					<SearchResult>
+						<div>loading...!</div>
+					</SearchResult>
+				);
+
+			return (
+				<SearchResult>
+					<div>No Matched Result</div>
+				</SearchResult>
+			);
 		}
 
-		return loadedResults;
+		return null;
 	}
 
 	render() {
@@ -99,6 +89,7 @@ export default class NavbarSearch extends Component {
 			<div>
 				<form style={{ width: '450px' }}>
 					<input
+						id='search-input'
 						value={this.state.searched}
 						onFocus={() => this.handleFocus()}
 						onChange={this.handleChange}

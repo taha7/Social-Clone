@@ -18,8 +18,19 @@ class UserController extends Controller
             return $user;
         });
 
-        return response()->json([
-            'users' => $users
-        ], 200);
+        return response()->json(['users' => $users]);
+    }
+
+
+    public function search ($key) {
+        $users = User::where('name', 'like', '%'. $key. '%')
+                ->orWhere('email', $key)
+                ->get();
+        
+        return response()->json(['status' => true, 'users' => $users]);
+    }
+
+    public function addFriend () {
+        return User::find(21)->senders;
     }
 }

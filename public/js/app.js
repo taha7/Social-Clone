@@ -83233,10 +83233,7 @@ __webpack_require__.r(__webpack_exports__);
 var CreatePost = function CreatePost(props) {
   var hasError = function hasError(prop) {
     return props.errors.hasOwnProperty(prop) && props.errors[prop].length > 0;
-  }; // const errorMess = (prop) => {
-  // 	return hasError(prop) ? props.errors[prop][0] : null;
-  // };
-
+  };
 
   return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "card",
@@ -83257,7 +83254,11 @@ var CreatePost = function CreatePost(props) {
     rows: "3"
   })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "form-group text-center"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+    id: "image",
+    type: "file",
+    name: "image"
+  }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
     className: "btn btn-primary",
     style: styles.postButton,
     onClick: props.postCreated
@@ -83607,7 +83608,8 @@ var SearchResult = function SearchResult(props) {
     }, user.name, specifyRelation(user));
   })) : props.children;
   return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "search-result"
+    className: "search-result",
+    id: "search-result"
   }, loadedResult);
 };
 
@@ -83852,42 +83854,53 @@ function (_Component) {
   }
 
   _createClass(NavbarSearch, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var myThis = this;
+      $(document).click(function (_ref) {
+        var target = _ref.target;
+
+        if (!$(target).is('#search-result') && !$(target).parents().is('#search-result') && !$(target).is('#search-input')) {
+          myThis.setState({
+            resultLoading: false
+          });
+        }
+      });
+    }
+  }, {
     key: "handleFocus",
     value: function handleFocus() {
-      var _this2 = this;
-
+      // Get Old results
       this.setState({
         resultLoading: true
       });
-
-      if (this.state.users.length === 0) {
-        this.setState({
-          inputLoading: true
-        });
-        axios.get(laroute.route('users.index')).then(function (response) {
-          _this2.setState({
-            users: response.data.users,
-            inputLoading: false
-          });
-        });
-      }
     }
   }, {
     key: "handleChange",
     value: function handleChange(e) {
+      var _this2 = this;
+
       var searched = e.target.value;
       this.setState({
-        searched: searched
+        searched: searched,
+        inputLoading: true
       });
 
       if (searched.trim() !== '') {
-        var filteredUsers = this.state.users.filter(function (user) {
-          return user.name.toString().includes(searched);
+        axios.get(laroute.route('users.search', {
+          key: searched
+        })).then(function (_ref2) {
+          var data = _ref2.data;
+          return _this2.setState({
+            filteredUsers: data.users,
+            inputLoading: false
+          });
+        }).catch(function (errors) {
+          return console.log(errors);
         });
-        this.setState({
-          filteredUsers: filteredUsers
-        });
-      }
+      } else this.setState({
+        inputLoading: false
+      });
     }
   }, {
     key: "handleAddUser",
@@ -83898,28 +83911,17 @@ function (_Component) {
   }, {
     key: "handleSearchSesult",
     value: function handleSearchSesult() {
-      var loadedResults = null;
-
       if (this.state.resultLoading) {
-        if (this.state.filteredUsers.length !== 0) {
-          loadedResults = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_NavbarSearch_SearchResult__WEBPACK_IMPORTED_MODULE_2__["default"], {
-            addUser: this.handleAddUser,
-            users: this.state.filteredUsers
-          });
-        } else {
-          if (this.state.inputLoading) {
-            loadedResults = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_NavbarSearch_SearchResult__WEBPACK_IMPORTED_MODULE_2__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "loading...!"));
-          } else {
-            if (this.state.searched.trim() === '') {
-              loadedResults = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_NavbarSearch_SearchResult__WEBPACK_IMPORTED_MODULE_2__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "Type Something"));
-            } else {
-              loadedResults = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_NavbarSearch_SearchResult__WEBPACK_IMPORTED_MODULE_2__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "No Matched Result"));
-            }
-          }
-        }
+        if (this.state.searched.trim() === '') return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_NavbarSearch_SearchResult__WEBPACK_IMPORTED_MODULE_2__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "Type Something"));
+        if (this.state.filteredUsers.length !== 0) return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_NavbarSearch_SearchResult__WEBPACK_IMPORTED_MODULE_2__["default"], {
+          addUser: this.handleAddUser,
+          users: this.state.filteredUsers
+        });
+        if (this.state.inputLoading) return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_NavbarSearch_SearchResult__WEBPACK_IMPORTED_MODULE_2__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "loading...!"));
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_NavbarSearch_SearchResult__WEBPACK_IMPORTED_MODULE_2__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "No Matched Result"));
       }
 
-      return loadedResults;
+      return null;
     }
   }, {
     key: "render",
@@ -83931,6 +83933,7 @@ function (_Component) {
           width: '450px'
         }
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        id: "search-input",
         value: this.state.searched,
         onFocus: function onFocus() {
           return _this3.handleFocus();

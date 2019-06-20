@@ -17,7 +17,7 @@ class CreateFriendshipsTable extends Migration
             $table->increments('id');
             $table->integer('user_id')->comment('The sender for the Request');
             $table->integer('friend_id');
-            $table->string('status');
+            $table->string('status')->default('pending');
             $table->timestamps();
         });
     }
