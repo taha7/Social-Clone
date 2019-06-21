@@ -22,15 +22,15 @@ class UserController extends Controller
     }
 
 
-    public function search ($key) {
-        $users = User::where('name', 'like', '%'. $key. '%')
-                ->orWhere('email', $key)
-                ->get();
-        
+    public function search($key)
+    {
+        $users = User::searchByKey($key)->get();
+
         return response()->json(['status' => true, 'users' => $users]);
     }
 
-    public function addFriend () {
+    public function addFriend()
+    {
         return User::find(21)->senders;
     }
 }

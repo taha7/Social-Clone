@@ -6,6 +6,8 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Traits\FriendshipTrait;
+
+
 class User extends Authenticatable
 {
     use Notifiable;
@@ -29,7 +31,7 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    protected static function boot () 
+    protected static function boot()
     {
         parent::boot();
 
@@ -37,13 +39,13 @@ class User extends Authenticatable
 
         static::addGlobalScope('senders', function ($builder) use ($authId) {
             $builder->with(['senders' => function ($query) use ($authId) {
-                $query->where('friend_id',$authId);
+                $query->where('friend_id', $authId);
             }]);
         });
 
         static::addGlobalScope('friends', function ($builder) use ($authId) {
             $builder->with(['friends' => function ($query) use ($authId) {
-                $query->where('user_id',$authId);
+                $query->where('user_id', $authId);
             }]);
         });
     }
@@ -59,16 +61,26 @@ class User extends Authenticatable
     }
 
     /** all friendships that this user sent to others  */
-    public function senders () {
+    public function senders()
+    {
         return $this->hasMany(Friendship::class, 'user_id');
     }
 
     /** all friendships that others sent to this user */
-    public function friends () {
+    public function friends()
+    {
         return $this->hasMany(Friendship::class, 'friend_id');
     }
 
-    public function getAcceptStatusAttribute() {
+    public function getAcceptStatusAttribute()
+    {
         return auth()->user()->acceptFriendShipStatus($this->id);
+    }
+
+    public function scopeSearchByKey($builder, $key)
+    {
+        $builder
+            ->where('name', 'like', '%' . $key . '%')
+            ->orWhere('email', 'like', '%' . $key . '%');
     }
 }
