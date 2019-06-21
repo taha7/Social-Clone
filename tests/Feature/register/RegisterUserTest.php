@@ -34,8 +34,39 @@ class RegisterUserTest extends TestCase
         $requiredFields = ['name', 'email', 'password'];
 
         foreach ($requiredFields as $field) {
-            $this->user["{$field}"] = null;
-            $this->post('/register/user', $this->user)->assertJsonValidationErrors(["{$field}"]);
+            $user = $this->user;
+            $user["{$field}"] = null;
+
+            $this->post('/register/user', $user)
+                ->assertJsonValidationErrors(["{$field}"])
+                ->assertJsonMissingValidationErrors(
+                    array_except($requiredFields, array_search("{$field}", $requiredFields))
+                );
         }
+    }
+
+    /** @test */
+    public function a_register_form_requires_a_valid_email()
+    {
+        $this->user['email'] = "unvalid email";
+
+        $this->post('/register/user', $this->user)
+            ->assertJsonValidationErrors(['email']);
+
+        $user = factory(User::class)->create();
+        $this->user['email'] = $user->email;
+
+        $this->post('/register/user', $this->user)
+            ->assertJsonValidationErrors(['email'])
+            ->assertJsonMissingValidationErrors(['name', 'password']);
+    }
+
+    /** @test */
+    public function a_register_form_requires_a_valid_password_confirmation()
+    {
+        $this->user['password_confirmation'] = "notequalpassword";
+        $this->post('/register/user', $this->user)
+            ->assertJsonValidationErrors(['password'])
+            ->assertJsonMissingValidationErrors(['name', 'email']);
     }
 }
