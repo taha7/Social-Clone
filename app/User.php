@@ -60,23 +60,6 @@ class User extends Authenticatable
         return $this->hasMany("App\Comment");
     }
 
-    /** all friendships that this user sent to others  */
-    public function senders()
-    {
-        return $this->hasMany(Friendship::class, 'user_id');
-    }
-
-    /** all friendships that others sent to this user */
-    public function friends()
-    {
-        return $this->hasMany(Friendship::class, 'friend_id');
-    }
-
-    public function getAcceptStatusAttribute()
-    {
-        return auth()->user()->acceptFriendShipStatus($this->id);
-    }
-
     public function scopeSearchByKey($builder, $key)
     {
         $builder

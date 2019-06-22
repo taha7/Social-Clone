@@ -23,4 +23,60 @@ class UserTest extends TestCase
 
         $this->assertEquals(2, $searchedUsers->count());
     }
+
+    /** @test */
+    public function it_can_add_friend()
+    {
+        $user = factory(User::class)->create();
+        $friend = factory(User::class)->create();
+
+        $friendship = $user->addFriend($friend->id);
+
+        $this->assertEquals($friendship->user_id, $user->id);
+        $this->assertEquals($friendship->friend_id, $friend->id);
+    }
+
+    /** @test */
+    public function it_can_not_add_a_friend_that_has_a_relation_with()
+    {
+        $user = factory(User::class)->create();
+        $friend = factory(User::class)->create();
+
+        $user->addFriend($friend->id);
+
+        $friendship = $user->addFriend($friend->id);
+
+        $this->assertFalse($friendship);
+    }
+
+    /** @test */
+    public function it_can_accept_request_from_a_friend_if_a_has_only()
+    {
+        $user = factory(User::class)->create();
+        $friend = factory(User::class)->create();
+
+        $this->assertFalse($user->acceptFriend($friend->id));
+
+        $friend->addFriend($user->id);
+
+        $this->assertFalse($friend->acceptFriend($user->id));
+        $this->assertTrue($user->acceptFriend($friend->id));
+    }
+
+    /** @test */
+    public function it_can_know_the_friend_ship_status()
+    {
+        $user = factory(User::class)->create();
+        $friend = factory(User::class)->create();
+
+        $this->assertFalse($user->friendshipStatus($friend->id));
+
+        $user->addFriend($friend->id);
+
+        $this->assertEquals($user->friendshipStatus($friend->id), 'pending');
+
+        $friend->acceptFriend($user->id);
+
+        $this->assertEquals($user->friendshipStatus($friend->id), 'friends');
+    }
 }

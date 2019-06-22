@@ -5,42 +5,59 @@ use App\Friendship;
 
 
 
-trait FriendshipTrait {
+trait FriendshipTrait
+{
+
+    /** all friendships that this user sent to others  */
+    public function senders()
+    {
+        return $this->hasMany(Friendship::class, 'user_id');
+    }
+
+    /** all friendships that others sent to this user */
+    public function friends()
+    {
+        return $this->hasMany(Friendship::class, 'friend_id');
+    }
 
 
-    public function hasRelation ($friend_id) {
-        return 
-            $this->senders()->where('friend_id', $friend_id)->exists() 
+    public function hasRelation($friend_id)
+    {
+        return
+            $this->senders()->where('friend_id', $friend_id)->exists()
             || $this->friends()->where('user_id', $friend_id)->exists();
     }
 
-    public function friendshipStatus ($friend_id) {
+    public function friendshipStatus($friend_id)
+    {
         if (!$this->hasRelation($friend_id)) return false;
-        
-        return  Friendship::where(['user_id' => $this->id, 'friend_id' => $friend_id])
-                    ->orWhere(['user_id' => $friend_id, 'friend_id' => $this->id])
-                    ->first()->status;
+
+        return  Friendship::relation($this->id, $friend_id)->first()->status;
     }
 
-    public function addFriend ($friend_id) {
+    public function addFriend($friend_id)
+    {
         if (!$this->hasRelation($friend_id)) {
-            Friendship::create(['user_id' => $this->id, 'friend_id' => $friend_id]);
+            return Friendship::create(['user_id' => $this->id, 'friend_id' => $friend_id]);
         }
 
         return false;
     }
 
-    public function hasFriendRequestFrom ($friend_id) {
-        $friendship = Friendship::where(['user_id' => $friend_id, 'friend_id'=> $this->id])->first();
-        
+    public function hasFriendRequestFrom($friend_id)
+    {
+        // Is this user in a relation where he is a friend on 
+        $friendship = Friendship::where(['user_id' => $friend_id, 'friend_id' => $this->id])->first();
+
         return  isset($friendship->status) && $friendship->status === "pending" ? $friendship : false;
     }
 
-    public function acceptFriend ($friend_id) {
-        if ($friendship = $this->hasFriendRequestFrom($friend_id)) { 
-           return $friendship->update(['status' => 'friends']);
+    public function acceptFriend($friend_id)
+    {
+        if ($friendship = $this->hasFriendRequestFrom($friend_id)) {
+            return $friendship->update(['status' => 'friends']);
         }
-        
+
         return false;
     }
 
