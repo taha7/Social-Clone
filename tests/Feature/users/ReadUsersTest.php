@@ -27,4 +27,29 @@ class ReadUsersTest extends TestCase
             ]);
         });
     }
+
+    /** @test */
+    public function when_search_it_returns_the_status_between_auth_and_searched_user()
+    {
+        $this->be($authUser = factory(User::class)->create(['name' => 'taha']));
+
+
+        factory(User::class)->create(['name' => 'taha'])->addFriend($authUser->id);
+
+        $authUser->addFriend(factory(User::class)->create(['name' => 'taha'])->id);
+
+        $userIsFriendWithAuth = factory(User::class)->create(['name' => 'taha']);
+        $authUser->addFriend($userIsFriendWithAuth->id);
+        $userIsFriendWithAuth->acceptFriend($authUser->id);
+
+        factory(User::class)->create(['name' => 'taha']);
+
+        $resonse =  $this->getJson('/users/search/taha');
+
+        $sendStatus = array_column($resonse->decodeResponseJson()['users'], 'sendStatus');
+        $recieveStatus = array_column($resonse->decodeResponseJson()['users'], 'recieveStatus');
+
+        $this->assertEquals([null, "pending", null, null, null], $sendStatus);
+        $this->assertEquals([null, null, "pending", "friends", null], $recieveStatus);
+    }
 }

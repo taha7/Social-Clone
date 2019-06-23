@@ -83584,7 +83584,11 @@ var SearchResult = function SearchResult(props) {
     if (window.App.user.id == user.id) {
       relationOutput = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "Profile");
     } else if (user.sendStatus === 'pending') {
-      relationOutput = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_hoc_Wrap__WEBPACK_IMPORTED_MODULE_1__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", null, "accept"), " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", null, "remove"));
+      relationOutput = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_hoc_Wrap__WEBPACK_IMPORTED_MODULE_1__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        onClick: function onClick() {
+          return props.acceptFriend(user.id);
+        }
+      }, "accept"), " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", null, "remove"));
     } else if (user.recieveStatus === 'pending') {
       relationOutput = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_hoc_Wrap__WEBPACK_IMPORTED_MODULE_1__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "wait accept"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", null, "cancel"));
     } else if (user.recieveStatus === 'friends' || user.sendStatus === 'friends') {
@@ -83592,7 +83596,7 @@ var SearchResult = function SearchResult(props) {
     } else {
       relationOutput = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         onClick: function onClick() {
-          return props.addUser(user.id);
+          return props.addFriend(user.id);
         },
         className: "btn btn-blue"
       }, "Add Friend ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
@@ -83855,6 +83859,7 @@ function (_Component) {
     _this.handleChange = _this.handleChange.bind(_assertThisInitialized(_this));
     _this.handleSearchSesult = _this.handleSearchSesult.bind(_assertThisInitialized(_this));
     _this.handleAddUser = _this.handleAddUser.bind(_assertThisInitialized(_this));
+    _this.handleAcceptFriend = _this.handleAcceptFriend.bind(_assertThisInitialized(_this));
     return _this;
   }
 
@@ -83927,12 +83932,32 @@ function (_Component) {
       });
     }
   }, {
+    key: "handleAcceptFriend",
+    value: function handleAcceptFriend(friend) {
+      var _this4 = this;
+
+      axios.get(laroute.route('user.acceptfriend', {
+        friend: friend
+      })).then(function (_ref4) {
+        var data = _ref4.data;
+
+        var filteredUsers = _this4.state.filteredUsers.map(function (user) {
+          return user.id == data.friend.id ? data.friend : user;
+        });
+
+        _this4.setState({
+          filteredUsers: filteredUsers
+        });
+      });
+    }
+  }, {
     key: "handleSearchSesult",
     value: function handleSearchSesult() {
       if (this.state.resultLoading) {
         if (this.state.searched.trim() === '') return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_NavbarSearch_SearchResult__WEBPACK_IMPORTED_MODULE_2__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "Type Something"));
         if (this.state.filteredUsers.length !== 0) return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_NavbarSearch_SearchResult__WEBPACK_IMPORTED_MODULE_2__["default"], {
-          addUser: this.handleAddUser,
+          addFriend: this.handleAddUser,
+          acceptFriend: this.handleAcceptFriend,
           users: this.state.filteredUsers
         });
         if (this.state.inputLoading) return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_NavbarSearch_SearchResult__WEBPACK_IMPORTED_MODULE_2__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "loading...!"));
@@ -83944,7 +83969,7 @@ function (_Component) {
   }, {
     key: "render",
     value: function render() {
-      var _this4 = this;
+      var _this5 = this;
 
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
         style: {
@@ -83954,7 +83979,7 @@ function (_Component) {
         id: "search-input",
         value: this.state.searched,
         onFocus: function onFocus() {
-          return _this4.handleFocus();
+          return _this5.handleFocus();
         },
         onChange: this.handleChange,
         className: 'form-control ' + (this.state.inputLoading ? 'input-loading' : ''),

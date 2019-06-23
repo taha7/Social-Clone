@@ -12,6 +12,7 @@ Route::get('/users', 'UserController@index')->name('users.index');
 Route::get('/users/search/{key}', 'UserController@search')->name('users.search');
 
 Route::get('/user/add-friend/{friend}', 'UserController@addFriend')->name('user.addfriend');
+Route::get('/user/accept-friend/{friend}', 'UserController@acceptFriend')->name('user.acceptfriend');
 
 Route::get('/posts', 'PostController@index')->name('posts.index');
 Route::post('/posts', 'PostController@store')->name('posts.store');
@@ -23,8 +24,7 @@ Route::get('/auth', function () {
 });
 
 Route::get('/test2', function () {
-    $users = App\User::SendStatus()->get();
-    return $users;
+    return makeResponse();
 });
 Route::get('/test', function () {
 

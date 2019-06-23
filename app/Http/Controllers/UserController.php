@@ -26,21 +26,22 @@ class UserController extends Controller
     public function search($key)
     {
         $users = User::whoSend()->WhoRecieve()->searchByKey($key)->take(10)->get();
-
-
-        return response()->json([
-            'status' => true,
-            'users' => UserResource::collection($users)
-        ]);
+        return makeResponse(UserResource::collection($users), 'users');
     }
 
-    public function addFriend(User $friend)
+    public function addFriend($friend)
     {
-        if (auth()->user()->addFriend($friend->id)) {
-            return response()->json([
-                'status' => true,
-                'friend' => new UserResource(User::find($friend->id))
-            ]);
+        if (auth()->user()->addFriend($friend)) {
+            return makeResponse(new UserResource(User::find($friend)), 'friend');
+        }
+
+        return false;
+    }
+
+    public function acceptFriend($friend)
+    {
+        if (auth()->user()->acceptFriend($friend)) {
+            return makeResponse(new UserResource(User::find($friend)), 'friend');
         }
 
         return false;

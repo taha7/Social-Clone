@@ -10,7 +10,7 @@ const SearchResult = props => {
 		else if (user.sendStatus === 'pending') {
 			relationOutput = (
 				<Wrap>
-					<button>accept</button> <button>remove</button>
+					<button onClick={() => props.acceptFriend(user.id)}>accept</button> <button>remove</button>
 				</Wrap>
 			);
 		}
@@ -27,7 +27,7 @@ const SearchResult = props => {
 		}
 		else {
 			relationOutput = (
-				<button onClick={() => props.addUser(user.id)} className='btn btn-blue'>
+				<button onClick={() => props.addFriend(user.id)} className='btn btn-blue'>
 					Add Friend <i className='fas fa-user-plus' />
 				</button>
 			);
