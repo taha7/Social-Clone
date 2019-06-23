@@ -17,6 +17,7 @@ export default class NavbarSearch extends Component {
 		this.handleFocus = this.handleFocus.bind(this);
 		this.handleChange = this.handleChange.bind(this);
 		this.handleSearchSesult = this.handleSearchSesult.bind(this);
+		this.handleAddUser = this.handleAddUser.bind(this);
 	}
 
 	componentDidMount() {
@@ -49,10 +50,14 @@ export default class NavbarSearch extends Component {
 		else this.setState({ inputLoading: false });
 	}
 
-	handleAddUser(friendId) {
-		// axios.get(`/api/add-friend/${friendId}`).then((response) => {
-		// 	console.log(response.data);
-		// });
+	handleAddUser(friend) {
+		axios.get(laroute.route('user.addfriend', { friend: friend })).then(({ data }) => {
+			const filteredUsers = this.state.filteredUsers.map(user => {
+				return user.id == data.friend.id ? data.friend : user;
+			});
+
+			this.setState({ filteredUsers });
+		});
 	}
 
 	handleSearchSesult() {

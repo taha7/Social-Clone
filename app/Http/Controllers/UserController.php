@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\User;
+use App\Http\Resources\User as UserResource;
 
 class UserController extends Controller
 {
@@ -24,13 +25,24 @@ class UserController extends Controller
 
     public function search($key)
     {
-        $users = User::searchByKey($key)->get();
+        $users = User::searchByKey($key)->take(10)->get();
 
-        return response()->json(['status' => true, 'users' => $users]);
+
+        return response()->json([
+            'status' => true,
+            'users' => UserResource::collection($users)
+        ]);
     }
 
-    public function addFriend()
+    public function addFriend(User $friend)
     {
-        return User::find(21)->senders;
+        if (auth()->user()->addFriend($friend->id)) {
+            return response()->json([
+                'status' => true,
+                'friend' => new UserResource(User::find($friend->id))
+            ]);
+        }
+
+        return false;
     }
 }

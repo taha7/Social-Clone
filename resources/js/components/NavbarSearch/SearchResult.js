@@ -1,13 +1,26 @@
 import React from 'react';
+import Wrap from '../../hoc/Wrap';
 
 const SearchResult = props => {
 	function specifyRelation(user) {
 		let relationOutput = null;
-		if (user.sendStatus === 'pending') {
-			relationOutput = <div>wait accept</div>;
+		if (window.App.user.id == user.id) {
+			relationOutput = <div>Profile</div>;
+		}
+		else if (user.sendStatus === 'pending') {
+			relationOutput = (
+				<Wrap>
+					<button>accept</button> <button>remove</button>
+				</Wrap>
+			);
 		}
 		else if (user.recieveStatus === 'pending') {
-			relationOutput = <button>accept</button>;
+			relationOutput = (
+				<Wrap>
+					<div>wait accept</div>
+					<button>cancel</button>
+				</Wrap>
+			);
 		}
 		else if (user.recieveStatus === 'friends' || user.sendStatus === 'friends') {
 			relationOutput = <div>friends</div>;

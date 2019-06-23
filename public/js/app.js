@@ -83573,16 +83573,20 @@ var UserSideMenu = function UserSideMenu() {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _hoc_Wrap__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../hoc/Wrap */ "./resources/js/hoc/Wrap.js");
+
 
 
 var SearchResult = function SearchResult(props) {
   function specifyRelation(user) {
     var relationOutput = null;
 
-    if (user.sendStatus === 'pending') {
-      relationOutput = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "wait accept");
+    if (window.App.user.id == user.id) {
+      relationOutput = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "Profile");
+    } else if (user.sendStatus === 'pending') {
+      relationOutput = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_hoc_Wrap__WEBPACK_IMPORTED_MODULE_1__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", null, "accept"), " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", null, "remove"));
     } else if (user.recieveStatus === 'pending') {
-      relationOutput = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", null, "accept");
+      relationOutput = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_hoc_Wrap__WEBPACK_IMPORTED_MODULE_1__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "wait accept"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", null, "cancel"));
     } else if (user.recieveStatus === 'friends' || user.sendStatus === 'friends') {
       relationOutput = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "friends");
     } else {
@@ -83850,6 +83854,7 @@ function (_Component) {
     _this.handleFocus = _this.handleFocus.bind(_assertThisInitialized(_this));
     _this.handleChange = _this.handleChange.bind(_assertThisInitialized(_this));
     _this.handleSearchSesult = _this.handleSearchSesult.bind(_assertThisInitialized(_this));
+    _this.handleAddUser = _this.handleAddUser.bind(_assertThisInitialized(_this));
     return _this;
   }
 
@@ -83904,9 +83909,22 @@ function (_Component) {
     }
   }, {
     key: "handleAddUser",
-    value: function handleAddUser(friendId) {// axios.get(`/api/add-friend/${friendId}`).then((response) => {
-      // 	console.log(response.data);
-      // });
+    value: function handleAddUser(friend) {
+      var _this3 = this;
+
+      axios.get(laroute.route('user.addfriend', {
+        friend: friend
+      })).then(function (_ref3) {
+        var data = _ref3.data;
+
+        var filteredUsers = _this3.state.filteredUsers.map(function (user) {
+          return user.id == data.friend.id ? data.friend : user;
+        });
+
+        _this3.setState({
+          filteredUsers: filteredUsers
+        });
+      });
     }
   }, {
     key: "handleSearchSesult",
@@ -83926,7 +83944,7 @@ function (_Component) {
   }, {
     key: "render",
     value: function render() {
-      var _this3 = this;
+      var _this4 = this;
 
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
         style: {
@@ -83936,7 +83954,7 @@ function (_Component) {
         id: "search-input",
         value: this.state.searched,
         onFocus: function onFocus() {
-          return _this3.handleFocus();
+          return _this4.handleFocus();
         },
         onChange: this.handleChange,
         className: 'form-control ' + (this.state.inputLoading ? 'input-loading' : ''),
@@ -84119,6 +84137,25 @@ function (_Component) {
 
 if (document.getElementById('register')) {
   react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Register, null), document.getElementById('register'));
+}
+
+/***/ }),
+
+/***/ "./resources/js/hoc/Wrap.js":
+/*!**********************************!*\
+  !*** ./resources/js/hoc/Wrap.js ***!
+  \**********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Wrap; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+function Wrap(props) {
+  return props.children;
 }
 
 /***/ }),

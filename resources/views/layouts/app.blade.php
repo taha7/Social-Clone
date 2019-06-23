@@ -82,6 +82,7 @@
             @yield('content')
         </main>
     </div>
+    <script> window.App = <?= json_encode(['user' => auth()->user()]); ?>; </script>
     <script src="{{asset('js/laroute.js')}} "></script>
     <script src="{{asset('js/app.js')}} "></script>
 </body>

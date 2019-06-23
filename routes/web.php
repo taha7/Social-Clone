@@ -11,7 +11,7 @@ Route::post('/register/user', 'Auth\RegisterController@registerUser')->name('reg
 Route::get('/users', 'UserController@index')->name('users.index');
 Route::get('/users/search/{key}', 'UserController@search')->name('users.search');
 
-Route::get('/users/add-friend', 'UserController@addFriend')->name('users.addFriend');
+Route::get('/user/add-friend/{friend}', 'UserController@addFriend')->name('user.addfriend');
 
 Route::get('/posts', 'PostController@index')->name('posts.index');
 Route::post('/posts', 'PostController@store')->name('posts.store');
