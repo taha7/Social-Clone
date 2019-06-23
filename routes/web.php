@@ -22,6 +22,10 @@ Route::get('/auth', function () {
     return response()->json(['status' => true, 'user' => auth()->user() ?: null]);
 });
 
+Route::get('/test2', function () {
+    $users = App\User::SendStatus()->get();
+    return $users;
+});
 Route::get('/test', function () {
 
     return App\User::all();

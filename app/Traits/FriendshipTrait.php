@@ -8,6 +8,22 @@ use App\Friendship;
 trait FriendshipTrait
 {
 
+    public function scopeWhoSend ($query) {
+        $authId = auth()->id();
+
+        $query->with(['senders' => function ($query) use ($authId) {
+            $query->where('friend_id', $authId);
+        }]);
+    }
+
+    public function scopeWhoRecieve ($query) {
+        $authId = auth()->id();
+
+        $query->with(['friends' => function ($query) use ($authId) {
+            $query->where('user_id', $authId);
+        }]);
+    }
+
     /** all friendships that this user sent to others  */
     public function senders()
     {

@@ -25,7 +25,7 @@ class UserController extends Controller
 
     public function search($key)
     {
-        $users = User::searchByKey($key)->take(10)->get();
+        $users = User::whoSend()->WhoRecieve()->searchByKey($key)->take(10)->get();
 
 
         return response()->json([
