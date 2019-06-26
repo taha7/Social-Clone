@@ -15,4 +15,13 @@ class Friendship extends Model
             ->where(['user_id' => $user_id, 'friend_id' => $friend_id])
             ->orWhere(['user_id' => $friend_id, 'friend_id' => $user_id]);
     }
+
+    public static function makeFriends($user, $friend)
+    {
+        static::create([
+            'user_id' => $user,
+            'friend_id' => $friend,
+            'status' => 'friends'
+        ]);
+    }
 }

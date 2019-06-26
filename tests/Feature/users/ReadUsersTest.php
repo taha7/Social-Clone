@@ -6,6 +6,7 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\User;
+use App\Friendship;
 
 class ReadUsersTest extends TestCase
 {
@@ -37,9 +38,10 @@ class ReadUsersTest extends TestCase
 
         $authUser->addFriend(create(User::class, ['name' => 'taha'])->id);
 
-        $userIsFriendWithAuth = create(User::class, ['name' => 'taha']);
-        $authUser->addFriend($userIsFriendWithAuth->id);
-        $userIsFriendWithAuth->acceptFriend($authUser->id);
+        Friendship::makeFriends(
+            $authUser->id,
+            create(User::class, ['name' => 'taha'])->id
+        );
 
         create(User::class, ['name' => 'taha']);
 

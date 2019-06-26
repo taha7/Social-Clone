@@ -8,7 +8,8 @@ use App\Friendship;
 trait FriendshipTrait
 {
 
-    public function scopeWhoSend ($query) {
+    public function scopeWhoSend($query)
+    {
         $authId = auth()->id();
 
         $query->with(['senders' => function ($query) use ($authId) {
@@ -16,7 +17,8 @@ trait FriendshipTrait
         }]);
     }
 
-    public function scopeWhoRecieve ($query) {
+    public function scopeWhoRecieve($query)
+    {
         $authId = auth()->id();
 
         $query->with(['friends' => function ($query) use ($authId) {
