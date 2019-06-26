@@ -21,7 +21,9 @@ const SearchResult = props => {
 			relationOutput = (
 				<Wrap>
 					<div>wait accept</div>
-					<button>cancel</button>
+					<button onClick={() => props.removeFriendRequest(user.id)}>
+						Cancel Request
+					</button>
 				</Wrap>
 			);
 		}

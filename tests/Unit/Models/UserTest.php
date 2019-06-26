@@ -6,6 +6,7 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\User;
+use App\Friendship;
 
 class UserTest extends TestCase
 {
@@ -61,6 +62,20 @@ class UserTest extends TestCase
 
         $this->assertFalse($friend->acceptFriend($user->id));
         $this->assertTrue($user->acceptFriend($friend->id));
+    }
+
+    /** @test */
+    public function it_can_remove_friendship_with_a_friend()
+    {
+        $user = create(User::class);
+
+        $friend = create(User::class);
+
+        $user->addFriend($friend->id);
+
+        $user->removeFriend($friend->id);
+
+        $this->assertCount(0, Friendship::all());
     }
 
     /** @test */

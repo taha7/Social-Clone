@@ -14,7 +14,6 @@ class User extends JsonResource
      */
     public function toArray($request)
     {
-
         $sendStatus = count($this->senders) ? $this->senders[0]->status : null;
         $friendStatus = count($this->friends) ? $this->friends[0]->status : null;
 

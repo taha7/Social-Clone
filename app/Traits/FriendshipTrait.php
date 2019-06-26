@@ -82,7 +82,9 @@ trait FriendshipTrait
     /** Needs test */
     public function removeFriend($friend_id)
     {
-        if ($friendship = $this->hasFriendRequestFrom($friend_id)) {
+        $friendship = Friendship::relation($this->id, $friend_id)->first();
+
+        if ($friendship) {
             return $friendship->delete();
         }
 

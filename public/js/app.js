@@ -83594,7 +83594,11 @@ var SearchResult = function SearchResult(props) {
         }
       }, "Remove Request"));
     } else if (user.recieveStatus === 'pending') {
-      relationOutput = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_hoc_Wrap__WEBPACK_IMPORTED_MODULE_1__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "wait accept"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", null, "cancel"));
+      relationOutput = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_hoc_Wrap__WEBPACK_IMPORTED_MODULE_1__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "wait accept"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        onClick: function onClick() {
+          return props.removeFriendRequest(user.id);
+        }
+      }, "Cancel Request"));
     } else if (user.recieveStatus === 'friends' || user.sendStatus === 'friends') {
       relationOutput = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "friends");
     } else {
