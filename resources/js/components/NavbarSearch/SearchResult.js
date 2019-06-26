@@ -10,7 +10,10 @@ const SearchResult = props => {
 		else if (user.sendStatus === 'pending') {
 			relationOutput = (
 				<Wrap>
-					<button onClick={() => props.acceptFriend(user.id)}>accept</button> <button>remove</button>
+					<button onClick={() => props.acceptFriend(user.id)}>accept</button>{' '}
+					<button onClick={() => props.removeFriendRequest(user.id)}>
+						Remove Request
+					</button>
 				</Wrap>
 			);
 		}
@@ -38,7 +41,10 @@ const SearchResult = props => {
 	let loadedResult = props.users ? (
 		<ul className='list-group'>
 			{props.users.map(user => (
-				<li key={user.id} className='list-group-item d-flex justify-content-between align-items-center'>
+				<li
+					key={user.id}
+					className='list-group-item d-flex justify-content-between align-items-center'
+				>
 					{user.name}
 					{specifyRelation(user)}
 				</li>

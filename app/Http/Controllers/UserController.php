@@ -46,4 +46,12 @@ class UserController extends Controller
 
         return false;
     }
+
+    public function removeFriend($friend)
+    {
+        if (auth()->user()->removeFriend($friend)) {
+            return makeResponse(new UserResource(User::find($friend)), 'friend');
+        }
+        return false;
+    }
 }

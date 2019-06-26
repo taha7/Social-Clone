@@ -79,6 +79,16 @@ trait FriendshipTrait
         return false;
     }
 
+    /** Needs test */
+    public function removeFriend($friend_id)
+    {
+        if ($friendship = $this->hasFriendRequestFrom($friend_id)) {
+            return $friendship->delete();
+        }
+
+        return false;
+    }
+
 
 
 

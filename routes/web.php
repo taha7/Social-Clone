@@ -13,6 +13,7 @@ Route::get('/users/search/{key}', 'UserController@search')->name('users.search')
 
 Route::get('/user/add-friend/{friend}', 'UserController@addFriend')->name('user.addfriend');
 Route::get('/user/accept-friend/{friend}', 'UserController@acceptFriend')->name('user.acceptfriend');
+Route::get('/user/remove-friend/{friend}', 'UserController@removeFriend')->name('user.removefriend');
 
 Route::get('/posts', 'PostController@index')->name('posts.index');
 Route::post('/posts', 'PostController@store')->name('posts.store');

@@ -19,6 +19,8 @@ export default class NavbarSearch extends Component {
 		this.handleSearchSesult = this.handleSearchSesult.bind(this);
 		this.handleAddUser = this.handleAddUser.bind(this);
 		this.handleAcceptFriend = this.handleAcceptFriend.bind(this);
+		this.updateFilteredUsers = this.updateFilteredUsers.bind(this);
+		this.handleRemoveFriendRequest = this.handleRemoveFriendRequest.bind(this);
 	}
 
 	componentDidMount() {
@@ -51,23 +53,29 @@ export default class NavbarSearch extends Component {
 		else this.setState({ inputLoading: false });
 	}
 
+	updateFilteredUsers(friend) {
+		const filteredUsers = this.state.filteredUsers.map(user => {
+			return user.id == friend.id ? friend : user;
+		});
+
+		this.setState({ filteredUsers });
+	}
+
 	handleAddUser(friend) {
 		axios.get(laroute.route('user.addfriend', { friend })).then(({ data }) => {
-			const filteredUsers = this.state.filteredUsers.map(user => {
-				return user.id == data.friend.id ? data.friend : user;
-			});
-
-			this.setState({ filteredUsers });
+			this.updateFilteredUsers(data.friend);
 		});
 	}
 
 	handleAcceptFriend(friend) {
 		axios.get(laroute.route('user.acceptfriend', { friend })).then(({ data }) => {
-			const filteredUsers = this.state.filteredUsers.map(user => {
-				return user.id == data.friend.id ? data.friend : user;
-			});
+			this.updateFilteredUsers(data.friend);
+		});
+	}
 
-			this.setState({ filteredUsers });
+	handleRemoveFriendRequest(friend) {
+		axios.get(laroute.route('user.removefriend', { friend })).then(({ data }) => {
+			this.updateFilteredUsers(data.friend);
 		});
 	}
 
@@ -85,6 +93,7 @@ export default class NavbarSearch extends Component {
 					<SearchResult
 						addFriend={this.handleAddUser}
 						acceptFriend={this.handleAcceptFriend}
+						removeFriendRequest={this.handleRemoveFriendRequest}
 						users={this.state.filteredUsers}
 					/>
 				);
@@ -115,7 +124,10 @@ export default class NavbarSearch extends Component {
 						value={this.state.searched}
 						onFocus={() => this.handleFocus()}
 						onChange={this.handleChange}
-						className={'form-control ' + (this.state.inputLoading ? 'input-loading' : '')}
+						className={
+							'form-control ' +
+							(this.state.inputLoading ? 'input-loading' : '')
+						}
 						type='text'
 					/>
 				</form>

@@ -15,8 +15,6 @@ abstract class TestCase extends BaseTestCase
     {
         parent::setUp();
 
-
-
         TestResponse::macro('jsonData', function ($key) {
             return $this->decodeResponseJson()[$key];
         });
