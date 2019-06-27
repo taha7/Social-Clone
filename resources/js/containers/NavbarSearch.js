@@ -17,10 +17,9 @@ export default class NavbarSearch extends Component {
 		this.handleFocus = this.handleFocus.bind(this);
 		this.handleChange = this.handleChange.bind(this);
 		this.handleSearchSesult = this.handleSearchSesult.bind(this);
-		this.handleAddUser = this.handleAddUser.bind(this);
-		this.handleAcceptFriend = this.handleAcceptFriend.bind(this);
+
 		this.updateFilteredUsers = this.updateFilteredUsers.bind(this);
-		this.handleRemoveFriendRequest = this.handleRemoveFriendRequest.bind(this);
+		this.handleControlFriend = this.handleControlFriend.bind(this);
 	}
 
 	componentDidMount() {
@@ -61,20 +60,8 @@ export default class NavbarSearch extends Component {
 		this.setState({ filteredUsers });
 	}
 
-	handleAddUser(friend) {
-		axios.get(laroute.route('user.addfriend', { friend })).then(({ data }) => {
-			this.updateFilteredUsers(data.friend);
-		});
-	}
-
-	handleAcceptFriend(friend) {
-		axios.get(laroute.route('user.acceptfriend', { friend })).then(({ data }) => {
-			this.updateFilteredUsers(data.friend);
-		});
-	}
-
-	handleRemoveFriendRequest(friend) {
-		axios.get(laroute.route('user.removefriend', { friend })).then(({ data }) => {
+	handleControlFriend(friend, control) {
+		axios.get(laroute.route('user.controlfriend', { friend, control })).then(({ data }) => {
 			this.updateFilteredUsers(data.friend);
 		});
 	}
@@ -91,9 +78,7 @@ export default class NavbarSearch extends Component {
 			if (this.state.filteredUsers.length !== 0)
 				return (
 					<SearchResult
-						addFriend={this.handleAddUser}
-						acceptFriend={this.handleAcceptFriend}
-						removeFriendRequest={this.handleRemoveFriendRequest}
+						controlFriend={this.handleControlFriend}
 						users={this.state.filteredUsers}
 					/>
 				);

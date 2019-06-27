@@ -83586,17 +83586,17 @@ var SearchResult = function SearchResult(props) {
     } else if (user.sendStatus === 'pending') {
       relationOutput = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_hoc_Wrap__WEBPACK_IMPORTED_MODULE_1__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         onClick: function onClick() {
-          return props.acceptFriend(user.id);
+          return props.controlFriend(user.id, 'acceptFriend');
         }
       }, "accept"), ' ', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         onClick: function onClick() {
-          return props.removeFriendRequest(user.id);
+          return props.controlFriend(user.id, 'removeFriend');
         }
       }, "Remove Request"));
     } else if (user.recieveStatus === 'pending') {
       relationOutput = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_hoc_Wrap__WEBPACK_IMPORTED_MODULE_1__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "wait accept"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         onClick: function onClick() {
-          return props.removeFriendRequest(user.id);
+          return props.controlFriend(user.id, 'removeFriend');
         }
       }, "Cancel Request"));
     } else if (user.recieveStatus === 'friends' || user.sendStatus === 'friends') {
@@ -83604,7 +83604,7 @@ var SearchResult = function SearchResult(props) {
     } else {
       relationOutput = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         onClick: function onClick() {
-          return props.addFriend(user.id);
+          return props.controlFriend(user.id, 'addFriend');
         },
         className: "btn btn-blue"
       }, "Add Friend ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
@@ -83866,10 +83866,8 @@ function (_Component) {
     _this.handleFocus = _this.handleFocus.bind(_assertThisInitialized(_this));
     _this.handleChange = _this.handleChange.bind(_assertThisInitialized(_this));
     _this.handleSearchSesult = _this.handleSearchSesult.bind(_assertThisInitialized(_this));
-    _this.handleAddUser = _this.handleAddUser.bind(_assertThisInitialized(_this));
-    _this.handleAcceptFriend = _this.handleAcceptFriend.bind(_assertThisInitialized(_this));
     _this.updateFilteredUsers = _this.updateFilteredUsers.bind(_assertThisInitialized(_this));
-    _this.handleRemoveFriendRequest = _this.handleRemoveFriendRequest.bind(_assertThisInitialized(_this));
+    _this.handleControlFriend = _this.handleControlFriend.bind(_assertThisInitialized(_this));
     return _this;
   }
 
@@ -83933,42 +83931,17 @@ function (_Component) {
       });
     }
   }, {
-    key: "handleAddUser",
-    value: function handleAddUser(friend) {
+    key: "handleControlFriend",
+    value: function handleControlFriend(friend, control) {
       var _this3 = this;
 
-      axios.get(laroute.route('user.addfriend', {
-        friend: friend
+      axios.get(laroute.route('user.controlfriend', {
+        friend: friend,
+        control: control
       })).then(function (_ref3) {
         var data = _ref3.data;
 
         _this3.updateFilteredUsers(data.friend);
-      });
-    }
-  }, {
-    key: "handleAcceptFriend",
-    value: function handleAcceptFriend(friend) {
-      var _this4 = this;
-
-      axios.get(laroute.route('user.acceptfriend', {
-        friend: friend
-      })).then(function (_ref4) {
-        var data = _ref4.data;
-
-        _this4.updateFilteredUsers(data.friend);
-      });
-    }
-  }, {
-    key: "handleRemoveFriendRequest",
-    value: function handleRemoveFriendRequest(friend) {
-      var _this5 = this;
-
-      axios.get(laroute.route('user.removefriend', {
-        friend: friend
-      })).then(function (_ref5) {
-        var data = _ref5.data;
-
-        _this5.updateFilteredUsers(data.friend);
       });
     }
   }, {
@@ -83977,9 +83950,7 @@ function (_Component) {
       if (this.state.resultLoading) {
         if (this.state.searched.trim() === '') return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_NavbarSearch_SearchResult__WEBPACK_IMPORTED_MODULE_2__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "Type Something"));
         if (this.state.filteredUsers.length !== 0) return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_NavbarSearch_SearchResult__WEBPACK_IMPORTED_MODULE_2__["default"], {
-          addFriend: this.handleAddUser,
-          acceptFriend: this.handleAcceptFriend,
-          removeFriendRequest: this.handleRemoveFriendRequest,
+          controlFriend: this.handleControlFriend,
           users: this.state.filteredUsers
         });
         if (this.state.inputLoading) return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_NavbarSearch_SearchResult__WEBPACK_IMPORTED_MODULE_2__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "loading...!"));
@@ -83991,7 +83962,7 @@ function (_Component) {
   }, {
     key: "render",
     value: function render() {
-      var _this6 = this;
+      var _this4 = this;
 
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
         style: {
@@ -84001,7 +83972,7 @@ function (_Component) {
         id: "search-input",
         value: this.state.searched,
         onFocus: function onFocus() {
-          return _this6.handleFocus();
+          return _this4.handleFocus();
         },
         onChange: this.handleChange,
         className: 'form-control ' + (this.state.inputLoading ? 'input-loading' : ''),

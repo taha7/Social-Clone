@@ -29,29 +29,15 @@ class UserController extends Controller
         return makeResponse(UserResource::collection($users), 'users');
     }
 
-    public function addFriend($friend)
+    public function controlFriend($friend, $control)
     {
-        if (auth()->user()->addFriend($friend)) {
-            return makeResponse(new UserResource(User::find($friend)), 'friend');
+        if (method_exists(auth()->user(), $control)) {
+
+            if (auth()->user()->$control($friend)) {
+                return makeResponse(new UserResource(User::find($friend)), 'friend');
+            }
         }
 
-        return false;
-    }
-
-    public function acceptFriend($friend)
-    {
-        if (auth()->user()->acceptFriend($friend)) {
-            return makeResponse(new UserResource(User::find($friend)), 'friend');
-        }
-
-        return false;
-    }
-
-    public function removeFriend($friend)
-    {
-        if (auth()->user()->removeFriend($friend)) {
-            return makeResponse(new UserResource(User::find($friend)), 'friend');
-        }
         return false;
     }
 }

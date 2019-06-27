@@ -11,22 +11,15 @@ Route::post('/register/user', 'Auth\RegisterController@registerUser')->name('reg
 Route::get('/users', 'UserController@index')->name('users.index');
 Route::get('/users/search/{key}', 'UserController@search')->name('users.search');
 
-Route::get('/user/add-friend/{friend}', 'UserController@addFriend')->name('user.addfriend');
-Route::get('/user/accept-friend/{friend}', 'UserController@acceptFriend')->name('user.acceptfriend');
-Route::get('/user/remove-friend/{friend}', 'UserController@removeFriend')->name('user.removefriend');
+Route::get('/user/add-friend/{friend}/{control}', 'UserController@controlFriend')->name('user.controlfriend');
 
 Route::get('/posts', 'PostController@index')->name('posts.index');
 Route::post('/posts', 'PostController@store')->name('posts.store');
 Route::delete('/posts/{post}', 'PostController@destroy')->name('posts.delete');
 Route::get('/posts/{post}', 'PostController@show')->name('posts.show');
 
-Route::get('/auth', function () {
-    return response()->json(['status' => true, 'user' => auth()->user() ?: null]);
-});
 
-Route::get('/test2', function () {
-    return makeResponse();
-});
+
 Route::get('/test', function () {
 
     return App\User::all();
