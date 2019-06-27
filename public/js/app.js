@@ -83049,18 +83049,9 @@ __webpack_require__.r(__webpack_exports__);
 
 var mapDispatchToProps = function mapDispatchToProps(dispatch) {
   return {
-    getAuth: function getAuth() {
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/auth').then(function (_ref) {
-        var data = _ref.data;
-        return dispatch({
-          type: 'GET_AUTH',
-          payload: data.user
-        });
-      });
-    },
     loadExpectedPosts: function loadExpectedPosts() {
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(laroute.route('posts.index') + '?page=1').then(function (_ref2) {
-        var data = _ref2.data;
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(laroute.route('posts.index') + '?page=1').then(function (_ref) {
+        var data = _ref.data;
         return dispatch({
           type: 'LOAD_POSTS',
           payload: data.paginatedPosts
@@ -83070,8 +83061,8 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
       });
     },
     loadMorePosts: function loadMorePosts(currentPage) {
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(laroute.route('posts.index') + "?page=".concat(++currentPage)).then(function (_ref3) {
-        var data = _ref3.data;
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(laroute.route('posts.index') + "?page=".concat(++currentPage)).then(function (_ref2) {
+        var data = _ref2.data;
         return dispatch({
           type: 'MORE_POSTS',
           payload: data.paginatedPosts
@@ -83091,8 +83082,8 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
           payload: errors
         });
       } else {
-        axios__WEBPACK_IMPORTED_MODULE_0___default.a.post(laroute.route('posts.store'), post).then(function (_ref4) {
-          var data = _ref4.data;
+        axios__WEBPACK_IMPORTED_MODULE_0___default.a.post(laroute.route('posts.store'), post).then(function (_ref3) {
+          var data = _ref3.data;
           return dispatch({
             type: 'CREATE_POST',
             payload: data.post
@@ -83105,8 +83096,8 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
     deleteExpectedPost: function deleteExpectedPost(postId) {
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.delete(laroute.route('posts.delete', {
         post: postId
-      })).then(function (_ref5) {
-        var data = _ref5.data;
+      })).then(function (_ref4) {
+        var data = _ref4.data;
         return dispatch({
           type: 'DELETE_POST',
           payload: data.post
@@ -83326,13 +83317,13 @@ var ExpectedPost = function ExpectedPost(props) {
   })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "dropdown-menu",
     "aria-labelledby": "dropdownMenuButton"
-  }, props.auth.id === props.post.user.id ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+  }, window.App.user.id === props.post.user.id ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
     className: "dropdown-item",
     href: "javascript:0",
     onClick: props.deletePost
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
     className: "far fa-trash-alt"
-  }), " Delete Post") : null))))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+  }), ' ', "Delete Post") : null))))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "card-body"
   }, props.post.body));
 };
@@ -83399,7 +83390,6 @@ function (_Component) {
     value: function componentDidMount() {
       /** @description load all expects posts */
       this.props.loadExpectedPosts();
-      this.props.getAuth();
     }
     /** @description returns sweet alert */
 
@@ -83436,7 +83426,6 @@ function (_Component) {
       }), this.props.paginatedPosts.data.map(function (post) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_ExpectedPost_ExpectedPost__WEBPACK_IMPORTED_MODULE_3__["default"], {
           key: post.id,
-          auth: _this2.props.auth,
           post: post,
           deletePost: function deletePost() {
             return _this2.props.deleteExpectedPost(post.id);
@@ -83463,7 +83452,6 @@ function (_Component) {
 
 var mapStateToProps = function mapStateToProps(state) {
   return {
-    auth: state.ExpectedPostsReducer.auth,
     paginatedPosts: state.ExpectedPostsReducer.paginatedPosts,
     newPost: state.ExpectedPostsReducer.newPost,
     errors: state.ExpectedPostsReducer.errors,
@@ -83800,10 +83788,10 @@ function (_Component) {
 
 
 
-if (document.getElementById("user-home")) {
+if (document.getElementById('user-home')) {
   react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_redux__WEBPACK_IMPORTED_MODULE_3__["Provider"], {
     store: store
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(UserHome, null)), document.getElementById("user-home"));
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(UserHome, null)), document.getElementById('user-home'));
 }
 
 /***/ }),
@@ -84492,7 +84480,6 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var initialeState = {
-  auth: {},
   paginatedPosts: {
     current_page: 0,
     data: []
@@ -84511,11 +84498,6 @@ var expectedPostsReducer = function expectedPostsReducer() {
   var action = arguments.length > 1 ? arguments[1] : undefined;
 
   switch (action.type) {
-    case 'GET_AUTH':
-      return _objectSpread({}, state, {
-        auth: action.payload
-      });
-
     case 'LOAD_POSTS':
       return _objectSpread({}, state, {
         paginatedPosts: action.payload

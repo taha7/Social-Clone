@@ -1,8 +1,8 @@
-import { combineReducers } from "redux";
-import ExpectedPostsReducer from "./ExpectedPostsReducer";
+import { combineReducers } from 'redux';
+import ExpectedPostsReducer from './ExpectedPostsReducer';
 
 const rootReducer = combineReducers({
-    ExpectedPostsReducer: ExpectedPostsReducer
+	ExpectedPostsReducer: ExpectedPostsReducer
 });
 
 export default rootReducer;

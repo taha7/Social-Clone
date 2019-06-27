@@ -10,7 +10,6 @@ class ExpectedPosts extends Component {
 	componentDidMount() {
 		/** @description load all expects posts */
 		this.props.loadExpectedPosts();
-		this.props.getAuth();
 	}
 
 	/** @description returns sweet alert */
@@ -32,16 +31,15 @@ class ExpectedPosts extends Component {
 				{this.props.isPostCreated ? this.renderAlert() : null}
 				{/* create a new post */}
 				<CreatePost
-					changed={(e) => this.props.onChangeInput(e)}
+					changed={e => this.props.onChangeInput(e)}
 					postCreated={() => this.props.createExpectedPost(this.props.newPost)}
 					post={this.props.newPost}
 					errors={this.props.errors}
 				/>
 				{/* all expected posts */}
-				{this.props.paginatedPosts.data.map((post) => (
+				{this.props.paginatedPosts.data.map(post => (
 					<ExpectedPost
 						key={post.id}
-						auth={this.props.auth}
 						post={post}
 						deletePost={() => this.props.deleteExpectedPost(post.id)}
 					/>
@@ -50,7 +48,10 @@ class ExpectedPosts extends Component {
 				<div className='card' style={{ marginBottom: '5px' }}>
 					<div className='card-body'>
 						<a
-							onClick={() => this.props.loadMorePosts(this.props.paginatedPosts.current_page)}
+							onClick={() =>
+								this.props.loadMorePosts(
+									this.props.paginatedPosts.current_page
+								)}
 							href='javascript:0'
 						>
 							Load More...
@@ -62,9 +63,8 @@ class ExpectedPosts extends Component {
 	}
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
 	return {
-		auth: state.ExpectedPostsReducer.auth,
 		paginatedPosts: state.ExpectedPostsReducer.paginatedPosts,
 		newPost: state.ExpectedPostsReducer.newPost,
 		errors: state.ExpectedPostsReducer.errors,

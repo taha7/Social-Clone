@@ -1,5 +1,4 @@
 const initialeState = {
-	auth: {},
 	paginatedPosts: {
 		current_page: 0,
 		data: []
@@ -15,11 +14,6 @@ const initialeState = {
 
 const expectedPostsReducer = (state = initialeState, action) => {
 	switch (action.type) {
-		case 'GET_AUTH':
-			return {
-				...state,
-				auth: action.payload
-			};
 		case 'LOAD_POSTS':
 			return {
 				...state,
@@ -45,7 +39,7 @@ const expectedPostsReducer = (state = initialeState, action) => {
 			};
 		case 'DELETE_POST':
 			const filteredPosts = jQuery.extend(true, {}, state.paginatedPosts);
-			filteredPosts.data = filteredPosts.data.filter((post) => post.id !== action.payload.id);
+			filteredPosts.data = filteredPosts.data.filter(post => post.id !== action.payload.id);
 			return {
 				...state,
 				paginatedPosts: filteredPosts

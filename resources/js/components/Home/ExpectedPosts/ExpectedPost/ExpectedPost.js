@@ -1,13 +1,16 @@
 import React from 'react';
 import moment from 'moment';
-const ExpectedPost = (props) => {
+const ExpectedPost = props => {
 	return (
 		<div className='card' style={{ marginBottom: '5px' }}>
 			<div className='card-header'>
 				<div className='d-flex'>
 					<div>
 						{props.post.user.name}
-						<a href={laroute.route('posts.show', { post: props.post.id })} className='ml-2'>
+						<a
+							href={laroute.route('posts.show', { post: props.post.id })}
+							className='ml-2'
+						>
 							{moment(moment(props.post.created_at).format()).fromNow()}
 						</a>
 					</div>
@@ -23,10 +26,18 @@ const ExpectedPost = (props) => {
 							>
 								<i className='fas fa-ellipsis-h' />
 							</button>
-							<div className='dropdown-menu' aria-labelledby='dropdownMenuButton'>
-								{props.auth.id === props.post.user.id ? (
-									<a className='dropdown-item' href='javascript:0' onClick={props.deletePost}>
-										<i className='far fa-trash-alt' /> Delete Post
+							<div
+								className='dropdown-menu'
+								aria-labelledby='dropdownMenuButton'
+							>
+								{window.App.user.id === props.post.user.id ? (
+									<a
+										className='dropdown-item'
+										href='javascript:0'
+										onClick={props.deletePost}
+									>
+										<i className='far fa-trash-alt' />{' '}
+										Delete Post
 									</a>
 								) : null}
 							</div>
