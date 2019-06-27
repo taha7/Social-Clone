@@ -8,10 +8,9 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 Route::post('/register/user', 'Auth\RegisterController@registerUser')->name('register-user');
 
-Route::get('/users', 'UserController@index')->name('users.index');
-Route::get('/users/search/{key}', 'UserController@search')->name('users.search');
 
-Route::get('/user/add-friend/{friend}/{control}', 'UserController@controlFriend')->name('user.controlfriend');
+Route::get('/users/search/{key}', 'UserController@search')->name('users.search');
+Route::get('/user/control-friend/{friend}/{control}', 'UserController@controlFriend')->name('user.controlfriend');
 
 Route::get('/posts', 'PostController@index')->name('posts.index');
 Route::post('/posts', 'PostController@store')->name('posts.store');

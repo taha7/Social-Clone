@@ -20,14 +20,15 @@ class UserControlFriendsTest extends TestCase
 
         auth()->user()->addFriend($friend->id);
 
-        $response = $this->get("/user/remove-friend/{$friend->id}");
+        $response = $this->get("/user/control-friend/{$friend->id}/removeFriend");
+
 
         $this->assertNull($response->jsonData('friend')['sendStatus']);
         $this->assertNull($response->jsonData('friend')['recieveStatus']);
 
         $friend->addFriend(auth()->id());
 
-        $response = $this->get("/user/remove-friend/{$friend->id}");
+        $response = $this->get("/user/control-friend/{$friend->id}/removeFriend");
 
         $this->assertNull($response->jsonData('friend')['sendStatus']);
         $this->assertNull($response->jsonData('friend')['recieveStatus']);
