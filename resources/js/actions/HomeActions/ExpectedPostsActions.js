@@ -1,4 +1,3 @@
-import axios from 'axios';
 import Validation from '../../libraries/validation/validation';
 
 const mapDispatchToProps = dispatch => {

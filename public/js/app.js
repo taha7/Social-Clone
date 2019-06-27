@@ -83041,16 +83041,13 @@ module.exports = function(module) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _libraries_validation_validation__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../libraries/validation/validation */ "./resources/js/libraries/validation/validation.js");
-
+/* harmony import */ var _libraries_validation_validation__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../libraries/validation/validation */ "./resources/js/libraries/validation/validation.js");
 
 
 var mapDispatchToProps = function mapDispatchToProps(dispatch) {
   return {
     loadExpectedPosts: function loadExpectedPosts() {
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(laroute.route('posts.index') + '?page=1').then(function (_ref) {
+      axios.get(laroute.route('posts.index') + '?page=1').then(function (_ref) {
         var data = _ref.data;
         return dispatch({
           type: 'LOAD_POSTS',
@@ -83061,7 +83058,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
       });
     },
     loadMorePosts: function loadMorePosts(currentPage) {
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(laroute.route('posts.index') + "?page=".concat(++currentPage)).then(function (_ref2) {
+      axios.get(laroute.route('posts.index') + "?page=".concat(++currentPage)).then(function (_ref2) {
         var data = _ref2.data;
         return dispatch({
           type: 'MORE_POSTS',
@@ -83072,7 +83069,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
       });
     },
     createExpectedPost: function createExpectedPost(post) {
-      var errors = new _libraries_validation_validation__WEBPACK_IMPORTED_MODULE_1__["default"](post, {
+      var errors = new _libraries_validation_validation__WEBPACK_IMPORTED_MODULE_0__["default"](post, {
         body: ['required']
       });
 
@@ -83082,7 +83079,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
           payload: errors
         });
       } else {
-        axios__WEBPACK_IMPORTED_MODULE_0___default.a.post(laroute.route('posts.store'), post).then(function (_ref3) {
+        axios.post(laroute.route('posts.store'), post).then(function (_ref3) {
           var data = _ref3.data;
           return dispatch({
             type: 'CREATE_POST',
@@ -83094,7 +83091,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
       }
     },
     deleteExpectedPost: function deleteExpectedPost(postId) {
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.delete(laroute.route('posts.delete', {
+      axios.delete(laroute.route('posts.delete', {
         post: postId
       })).then(function (_ref4) {
         var data = _ref4.data;
@@ -83113,6 +83110,30 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
     onHideAlert: function onHideAlert() {
       return dispatch({
         type: 'HIDE_ALERT'
+      });
+    }
+  };
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (mapDispatchToProps);
+
+/***/ }),
+
+/***/ "./resources/js/actions/HomeActions/FriendsActions.js":
+/*!************************************************************!*\
+  !*** ./resources/js/actions/HomeActions/FriendsActions.js ***!
+  \************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+  return {
+    loadFriends: function loadFriends() {
+      return dispatch({
+        type: 'LOAD_FRIENDS',
+        payload: null
       });
     }
   };
@@ -83503,21 +83524,70 @@ var FriendRequests = function FriendRequests() {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var _actions_HomeActions_FriendsActions__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../actions/HomeActions/FriendsActions */ "./resources/js/actions/HomeActions/FriendsActions.js");
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 
-var Friends = function Friends() {
-  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-2"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "card"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "card-header"
-  }, " Friends "), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "card-body"
-  })));
+
+
+
+var Friends =
+/*#__PURE__*/
+function (_React$Component) {
+  _inherits(Friends, _React$Component);
+
+  function Friends(props) {
+    _classCallCheck(this, Friends);
+
+    return _possibleConstructorReturn(this, _getPrototypeOf(Friends).call(this, props));
+  }
+
+  _createClass(Friends, [{
+    key: "render",
+    value: function render() {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-md-2"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "card"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "card-header"
+      }, " Friends "), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", {
+        className: "list-group"
+      }, this.props.friends.map(function (friend) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
+          className: "list-group-item"
+        }, friend);
+      }))));
+    }
+  }]);
+
+  return Friends;
+}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
+
+var mapStateToProps = function mapStateToProps(state) {
+  return {
+    friends: state.FriendsReducer.friends
+  };
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (Friends);
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapStateToProps, _actions_HomeActions_FriendsActions__WEBPACK_IMPORTED_MODULE_2__["default"])(Friends));
 
 /***/ }),
 
@@ -84556,6 +84626,36 @@ var expectedPostsReducer = function expectedPostsReducer() {
 
 /***/ }),
 
+/***/ "./resources/js/reducers/Home/FriendsReducer.js":
+/*!******************************************************!*\
+  !*** ./resources/js/reducers/Home/FriendsReducer.js ***!
+  \******************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+var initialState = {
+  friends: ['name', 'name2', 'name3']
+};
+
+var friendsReducer = function friendsReducer() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
+  var action = arguments.length > 1 ? arguments[1] : undefined;
+
+  switch (action.type) {
+    case 'LOAD_FRIENDS':
+      return state;
+
+    default:
+      return state;
+  }
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (friendsReducer);
+
+/***/ }),
+
 /***/ "./resources/js/reducers/Home/index.js":
 /*!*********************************************!*\
   !*** ./resources/js/reducers/Home/index.js ***!
@@ -84567,10 +84667,13 @@ var expectedPostsReducer = function expectedPostsReducer() {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var redux__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
 /* harmony import */ var _ExpectedPostsReducer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ExpectedPostsReducer */ "./resources/js/reducers/Home/ExpectedPostsReducer.js");
+/* harmony import */ var _FriendsReducer__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./FriendsReducer */ "./resources/js/reducers/Home/FriendsReducer.js");
+
 
 
 var rootReducer = Object(redux__WEBPACK_IMPORTED_MODULE_0__["combineReducers"])({
-  ExpectedPostsReducer: _ExpectedPostsReducer__WEBPACK_IMPORTED_MODULE_1__["default"]
+  ExpectedPostsReducer: _ExpectedPostsReducer__WEBPACK_IMPORTED_MODULE_1__["default"],
+  FriendsReducer: _FriendsReducer__WEBPACK_IMPORTED_MODULE_2__["default"]
 });
 /* harmony default export */ __webpack_exports__["default"] = (rootReducer);
 
