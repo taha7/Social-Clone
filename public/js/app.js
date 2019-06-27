@@ -83130,10 +83130,15 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 __webpack_require__.r(__webpack_exports__);
 var mapDispatchToProps = function mapDispatchToProps(dispatch) {
   return {
-    loadFriends: function loadFriends() {
-      return dispatch({
-        type: 'LOAD_FRIENDS',
-        payload: null
+    loadMyFriends: function loadMyFriends() {
+      axios.get(laroute.route('user.friends')).then(function (_ref) {
+        var data = _ref.data;
+        return dispatch({
+          type: 'LOAD_FRIENDS',
+          payload: data.friends
+        });
+      }).catch(function (error) {
+        return console.log(error);
       });
     }
   };
@@ -83560,6 +83565,11 @@ function (_React$Component) {
   }
 
   _createClass(Friends, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      this.props.loadMyFriends();
+    }
+  }, {
     key: "render",
     value: function render() {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -83572,8 +83582,9 @@ function (_React$Component) {
         className: "list-group"
       }, this.props.friends.map(function (friend) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
-          className: "list-group-item"
-        }, friend);
+          className: "list-group-item",
+          key: friend.id
+        }, friend.name);
       }))));
     }
   }]);
@@ -84635,8 +84646,12 @@ var expectedPostsReducer = function expectedPostsReducer() {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 var initialState = {
-  friends: ['name', 'name2', 'name3']
+  friends: []
 };
 
 var friendsReducer = function friendsReducer() {
@@ -84645,7 +84660,9 @@ var friendsReducer = function friendsReducer() {
 
   switch (action.type) {
     case 'LOAD_FRIENDS':
-      return state;
+      return _objectSpread({}, state, {
+        friends: action.payload
+      });
 
     default:
       return state;

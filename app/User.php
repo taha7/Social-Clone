@@ -10,8 +10,7 @@ use App\Traits\FriendshipTrait;
 
 class User extends Authenticatable
 {
-    use Notifiable;
-    use FriendshipTrait;
+    use Notifiable, FriendshipTrait;
 
     /**
      * The attributes that are mass assignable.
@@ -48,4 +47,24 @@ class User extends Authenticatable
             ->orWhere('email', 'like', '%' . $key . '%');
     }
 
+    public function friendsISendToThem($needed = 10)
+    {
+        $friendships = $this->senders()->with('friend')->where('status', 'friends')->take(5)->get();
+        return array_column($friendships->toArray(), 'friend');
+    }
+
+    public function friendsTheySendToMe($needed = 10)
+    {
+        $friendships = $this->friends()->with('sender')->where('status', 'friends')->take(5)->get();
+
+        return array_column($friendships->toArray(), 'sender');
+    }
+
+    public function myFriends($following = 10, $followers = 10)
+    {
+        return array_merge(
+            $this->friendsISendToThem($following),
+            $this->friendsTheySendToMe($followers)
+        );
+    }
 }

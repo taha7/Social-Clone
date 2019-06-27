@@ -7,6 +7,10 @@ class Friends extends React.Component {
 		super(props);
 	}
 
+	componentDidMount() {
+		this.props.loadMyFriends();
+	}
+
 	render() {
 		return (
 			<div className='col-md-2'>
@@ -14,7 +18,9 @@ class Friends extends React.Component {
 					<div className='card-header'> Friends </div>
 					<ul className='list-group'>
 						{this.props.friends.map(friend => (
-							<li className='list-group-item'>{friend}</li>
+							<li className='list-group-item' key={friend.id}>
+								{friend.name}
+							</li>
 						))}
 					</ul>
 				</div>

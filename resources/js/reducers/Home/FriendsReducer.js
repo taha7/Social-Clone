@@ -1,11 +1,14 @@
 const initialState = {
-	friends: [ 'name', 'name2', 'name3' ]
+	friends: []
 };
 
 const friendsReducer = (state = initialState, action) => {
 	switch (action.type) {
 		case 'LOAD_FRIENDS':
-			return state;
+			return {
+				...state,
+				friends: action.payload
+			};
 		default:
 			return state;
 	}

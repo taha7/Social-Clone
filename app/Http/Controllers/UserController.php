@@ -25,4 +25,9 @@ class UserController extends Controller
 
         return false;
     }
+
+    public function getFriends()
+    {
+        return makeResponse(auth()->user()->myFriends(), 'friends');
+    }
 }

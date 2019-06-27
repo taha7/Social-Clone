@@ -1,7 +1,10 @@
 const mapDispatchToProps = dispatch => {
 	return {
-		loadFriends: () => {
-			return dispatch({ type: 'LOAD_FRIENDS', payload: null });
+		loadMyFriends: () => {
+			axios
+				.get(laroute.route('user.friends'))
+				.then(({ data }) => dispatch({ type: 'LOAD_FRIENDS', payload: data.friends }))
+				.catch(error => console.log(error));
 		}
 	};
 };
