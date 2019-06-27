@@ -84143,10 +84143,9 @@ function (_Component) {
       if (Object.keys(errors).length > 0) this.setState({
         errors: errors
       });else {
-        axios.post(laroute.route('register-user'), _objectSpread({}, this.state.user)).then(function (_ref2) {
-          var data = _ref2.data;
-          return data.status ? window.location.href = data.url : _this2.setState({
-            errors: data.errors
+        axios.post(laroute.route('register-user'), _objectSpread({}, this.state.user)).then(function (response) {
+          response.data.status ? window.location.href = response.headers.url : _this2.setState({
+            errors: response.data.errors
           });
         }).catch(function (error) {
           return console.log(error);

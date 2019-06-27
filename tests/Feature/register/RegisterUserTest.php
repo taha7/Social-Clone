@@ -21,9 +21,11 @@ class RegisterUserTest extends TestCase
     /** @test */
     public function a_user_can_register_to_system()
     {
+        $response = $this->post('/register/user', $this->user);
 
-        $this->post('/register/user', $this->user)
-            ->assertRedirect('/home');
+        $this->assertEquals($response->jsonData('user')['name'], $this->user['name']);
+
+        $this->assertEquals($response->headers->get('url'), '/home');
 
         $this->assertDatabaseHas('users', ['name' => $this->user['name']]);
     }
