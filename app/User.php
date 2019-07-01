@@ -49,13 +49,21 @@ class User extends Authenticatable
 
     public function friendsISendToThem($needed = 10)
     {
-        $friendships = $this->senders()->with('friend')->where('status', 'friends')->take(5)->get();
+        $friendships = Friendship::with('friend')
+            ->where(['user_id' => $this->id, 'status' => 'friends'])
+            ->take($needed)->get();
+
+        // $friendships = $this->senders()->with('friend')->where('status', 'friends')->take(5)->get();
         return array_column($friendships->toArray(), 'friend');
     }
 
     public function friendsTheySendToMe($needed = 10)
     {
-        $friendships = $this->friends()->with('sender')->where('status', 'friends')->take(5)->get();
+        $friendships = Friendship::with('sender')
+            ->where(['friend_id' => $this->id, 'status' => 'friends'])
+            ->take($needed)->get();
+
+        // $friendships = $this->friends()->with('sender')->where('status', 'friends')->take(5)->get();
 
         return array_column($friendships->toArray(), 'sender');
     }
