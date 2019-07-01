@@ -1,3 +1,0 @@
-//======================= 01-07-2019 =======================
-TODO: make getFriends function depends on Friendship model
-TODO: search for a friend functionality 
