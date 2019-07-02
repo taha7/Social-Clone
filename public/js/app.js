@@ -83565,17 +83565,33 @@ function (_React$Component) {
   }
 
   _createClass(FriendRequests, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      this.props.loadFriendRequests();
+    }
+  }, {
     key: "render",
     value: function render() {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "col-md-3"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "card"
+        className: "card",
+        style: {
+          minHeight: 580
+        }
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "card-header"
-      }, "Friend Requests"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "card-body"
-      })));
+      }, " Friend Requests "), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", {
+        className: "list-group",
+        style: {
+          flex: 1
+        }
+      }, this.props.friendRequests.map(function (friend) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
+          className: "list-group-item",
+          key: friend.id
+        }, friend.name);
+      }))));
     }
   }]);
 

@@ -1,3 +1,12 @@
-✔ make getFriends function depends on Friendship model @done(19-07-01 20:18)
-☐ search for a friend functionality @today UI done
-☐ Load Friend Requests @started(19-07-02 20:36)
+
+TODO: 
+   19-07-02 Archive: 
+  ✔ make getFriends function depends on Friendship model @done(19-07-01 20:18)
+  ✔ search for a friend UI @done(19-07-02 23:11)
+  ✔ Load Friend Requests @started(19-07-02 21:53) @done(19-07-02 23:11) @lasted(1h18m14s)
+
+FIXME:
+   ☐ when add friend after search in navbar it is sometimes return with wrong status
+TODO:
+   ☐ Upload Post with images
+   ☐ Make Profile page
