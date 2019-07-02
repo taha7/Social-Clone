@@ -75,4 +75,13 @@ class User extends Authenticatable
             $this->friendsTheySendToMe($followers)
         );
     }
+
+    public function getFriendRequests()
+    {
+        $friendships = Friendship::with('sender')
+            ->where(['status' => 'pending', 'friend_id' => $this->id])
+            ->get();
+
+        return array_column($friendships->toArray(), 'sender');
+    }
 }

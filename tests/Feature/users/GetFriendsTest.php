@@ -43,4 +43,35 @@ class GetFriendsTest extends TestCase
             $response->assertJsonMissing(['email' => $friend->email]);
         });
     }
+
+    /** @test */
+    public function users_display_their_friend_requests()
+    {
+        $this->signIn();
+
+        $followers = create(User::class, [], 3);
+
+        $followers->each->addFriend(auth()->id());
+
+        $following = create(User::class, [], 2);
+
+        $following->each(function ($follow) {
+            auth()->user()->addFriend($follow->id);
+        });
+
+        $response = $this->get('/user/friend-requests');
+
+        $followers->each(function ($follower) use ($response) {
+            $response->assertJsonFragment([
+                'email' => $follower->email
+            ]);
+        });
+
+        $following->each(function ($follow) use ($response) {
+            $response->assertJsonMissing([
+                'email' => $follow->email
+            ]);
+        });
+        // $response->jsonData('followers')
+    }
 }

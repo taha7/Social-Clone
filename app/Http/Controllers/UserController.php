@@ -30,4 +30,9 @@ class UserController extends Controller
     {
         return makeResponse(auth()->user()->myFriends(), 'friends');
     }
+
+    public function getFriendRequests()
+    {
+        return makeResponse(auth()->user()->getFriendRequests(), 'friendRequests');
+    }
 }
