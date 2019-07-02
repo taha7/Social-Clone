@@ -6,7 +6,7 @@ import rootReducer from '../reducers/Home';
 
 import Friends from '../components/Home/Friends/Friends';
 import ExpectedPosts from '../components/Home/ExpectedPosts/ExpectedPosts';
-import FriendRequests from '../components/Home/FriendRequests';
+import FriendRequests from '../components/Home/FriendRequests/FriendRequests';
 import UserSideMenu from '../components/Home/UserSideMenu';
 
 // Redux Store
