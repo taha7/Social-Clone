@@ -3,10 +3,8 @@
 namespace Tests\Feature\users;
 
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\User;
-use App\Friendship;
+
 
 class UserControlFriendsTest extends TestCase
 {
@@ -17,11 +15,15 @@ class UserControlFriendsTest extends TestCase
         $this->signIn();
 
         $friend = create(User::class);
+        $anotherFriend = create(User::class);
 
+        $friend->addFriend($anotherFriend->id);
+
+        auth()->user()->addFriend($anotherFriend->id);
         auth()->user()->addFriend($friend->id);
 
-        $response = $this->get("/user/control-friend/{$friend->id}/removeFriend");
 
+        $response = $this->get("/user/control-friend/{$friend->id}/removeFriend");
 
         $this->assertNull($response->jsonData('friend')['sendStatus']);
         $this->assertNull($response->jsonData('friend')['recieveStatus']);

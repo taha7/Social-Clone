@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\User;
-use App\Http\Resources\User as UserResource;
+use App\Http\Resources\UserResource;
 
 class UserController extends Controller
 {
@@ -17,6 +17,7 @@ class UserController extends Controller
 
     public function controlFriend($friend, $control)
     {
+
         if (method_exists(auth()->user(), $control)) {
             if (auth()->user()->$control($friend)) {
                 return makeResponse(new UserResource(User::find($friend)), 'friend');

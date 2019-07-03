@@ -6,7 +6,8 @@ TODO:
   ✔ Load Friend Requests @started(19-07-02 21:53) @done(19-07-02 23:11) @lasted(1h18m14s)
 
 FIXME:
-   ☐ when add friend after search in navbar it is sometimes return with wrong status
+   ✔ when add friend after search in navbar it is sometimes return with wrong status @done(19-07-03 22:37)
 TODO:
    ☐ Upload Post with images
    ☐ Make Profile page
+   ☐ Make a test for full control from user to friends

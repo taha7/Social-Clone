@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class User extends JsonResource
+class UserResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -14,8 +14,10 @@ class User extends JsonResource
      */
     public function toArray($request)
     {
-        $sendStatus = count($this->senders) ? $this->senders[0]->status : null;
-        $friendStatus = count($this->friends) ? $this->friends[0]->status : null;
+        $sendFriendship = $this->senders->where('friend_id', auth()->id())->first();
+        $reciveFriendship = $this->friends->where('user_id', auth()->id())->first();
+        $sendStatus =  $sendFriendship ? $sendFriendship->status : null;
+        $recieveStatus =  $reciveFriendship ? $reciveFriendship->status : null;
 
 
         return [
@@ -25,7 +27,7 @@ class User extends JsonResource
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'sendStatus' => $sendStatus ?: null,
-            'recieveStatus' => $friendStatus ?: null,
+            'recieveStatus' => $recieveStatus ?: null,
         ];
     }
 }

@@ -23,8 +23,8 @@ class Friendship extends Model
     public function scopeRelation($builder, $user_id, $friend_id)
     {
         $builder
-            ->where(['user_id' => $user_id, 'friend_id' => $friend_id])
-            ->orWhere(['user_id' => $friend_id, 'friend_id' => $user_id]);
+            ->where('user_id', $user_id)->Where('friend_id', $friend_id)
+            ->orWhere('user_id', $friend_id)->Where('friend_id', $user_id);
     }
 
     public static function makeFriends($user, $friend)
