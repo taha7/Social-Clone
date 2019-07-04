@@ -10,5 +10,10 @@ FIXME:
 TODO:
    ☐ Upload Post with images
    ☐ Make full registeration
+      ✔ database @started(19-07-04 16:31) @done(19-07-04 16:38) @lasted(7m31s)
+      ✔ react UI @started(19-07-04 16:40) @done(19-07-04 17:34) @lasted(13s)
+      ☐ react state
+      ☐ test
+      ☐ laravel
    ☐ Make Profile page
    ✔ Make a test for full control from user to friends @done(19-07-04 13:00)

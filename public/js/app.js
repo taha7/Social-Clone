@@ -83835,36 +83835,95 @@ var RegisterForm = function RegisterForm(props) {
     action: "#",
     onSubmit: props.onsubmit
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "form-group"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
-    htmlFor: "name"
-  }, "Name"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-    value: props.user.name,
+    className: "form-row"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "col-md-6 form-group"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+    value: props.user.fname,
     onChange: props.onchange,
     type: "text",
-    className: 'form-control ' + (hasError('name') ? 'is-invalid' : ''),
-    name: "name",
-    placeholder: "User Name"
+    className: 'form-control ' + (hasError('fname') ? 'is-invalid' : ''),
+    name: "fname",
+    placeholder: "First Name"
   }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "danger-text"
-  }, errorMess('name'))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+  }, errorMess('fname'))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "col-md-6 form-group"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+    value: props.user.lname,
+    onChange: props.onchange,
+    type: "text",
+    className: 'form-control ' + (hasError('lname') ? 'is-invalid' : ''),
+    name: "lname",
+    placeholder: "Last Name"
+  }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "danger-text"
+  }, errorMess('lname')))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "form-group"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
-    htmlFor: "email"
-  }, "Email address"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
     value: props.user.email,
     onChange: props.onchange,
     type: "email",
     className: 'form-control ' + (hasError('email') ? 'is-invalid' : ''),
     name: "email",
-    placeholder: "Enter email"
+    placeholder: "Your Email"
   }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "danger-text"
   }, errorMess('email'))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "form-group"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+    value: props.user.phone,
+    onChange: props.onchange,
+    type: "number",
+    className: 'form-control ' + (hasError('phone') ? 'is-invalid' : ''),
+    name: "phone",
+    placeholder: "Mobile Number"
+  }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "danger-text"
+  }, errorMess('phone'))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "form-group"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
-    htmlFor: "password"
-  }, "Password"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+    htmlFor: "birth_date"
+  }, "Birth Date"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+    id: "birth_date",
+    value: props.user.birth_date,
+    onChange: props.onchange,
+    type: "date",
+    className: 'form-control ' + (hasError('birth_date') ? 'is-invalid' : ''),
+    name: "birth_date"
+  }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "danger-text"
+  }, errorMess('birth_date'))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "form-group"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+    htmlFor: "gender"
+  }, "Gender"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "form-control"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "form-check form-check-inline"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+    className: "form-check-input",
+    type: "radio",
+    name: "inlineRadioOptions",
+    id: "inlineRadio1",
+    value: "option1"
+  }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+    className: "form-check-label",
+    for: "inlineRadio1"
+  }, "Male")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "form-check form-check-inline"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+    className: "form-check-input",
+    type: "radio",
+    name: "inlineRadioOptions",
+    id: "inlineRadio2",
+    value: "option2"
+  }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+    className: "form-check-label",
+    for: "inlineRadio2"
+  }, "Female")))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "form-group"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
     value: props.user.password,
     onChange: props.onchange,
     name: "password",
@@ -83876,15 +83935,14 @@ var RegisterForm = function RegisterForm(props) {
     className: "danger-text"
   }, errorMess('password'))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "form-group"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
-    htmlFor: "password-confirm"
-  }, "Confirm Password"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
     value: props.user.password_confirmation,
     onChange: props.onchange,
     name: "password_confirmation",
     type: "password",
     className: 'form-control ' + (hasError('password_confirmation') ? 'is-invalid' : ''),
-    required: true
+    required: true,
+    placeholder: "Password Confirmation"
   }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "danger-text"
   }, errorMess('password_confirmation'))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
