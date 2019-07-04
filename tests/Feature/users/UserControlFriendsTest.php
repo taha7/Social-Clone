@@ -8,31 +8,40 @@ use App\User;
 
 class UserControlFriendsTest extends TestCase
 {
-    /** @test */
-    public function it_removes_a_friend()
+
+    protected $friend;
+    protected $anotherFriend;
+
+    public function setUp()
     {
+        parent::setUp();
 
         $this->signIn();
 
-        $friend = create(User::class);
-        $anotherFriend = create(User::class);
+        $this->friend = create(User::class);
+        $this->anotherFriend = create(User::class);
+    }
 
-        $friend->addFriend($anotherFriend->id);
+    /** @test */
+    public function it_controls_a_friend()
+    {
 
-        auth()->user()->addFriend($anotherFriend->id);
-        auth()->user()->addFriend($friend->id);
+        $this->friend->addFriend($this->anotherFriend->id);
 
+        auth()->user()->addFriend($this->anotherFriend->id);
 
-        $response = $this->get("/user/control-friend/{$friend->id}/removeFriend");
+        $response = $this->get("/user/control-friend/{$this->friend->id}/addFriend");
+
+        $this->assertEquals($response->jsonData('friend')['recieveStatus'], 'pending');
+
+        $response = $this->get("/user/control-friend/{$this->friend->id}/removeFriend");
 
         $this->assertNull($response->jsonData('friend')['sendStatus']);
         $this->assertNull($response->jsonData('friend')['recieveStatus']);
 
-        $friend->addFriend(auth()->id());
+        $this->friend->addFriend(auth()->id());
+        $response = $this->get("/user/control-friend/{$this->friend->id}/acceptFriend");
 
-        $response = $this->get("/user/control-friend/{$friend->id}/removeFriend");
-
-        $this->assertNull($response->jsonData('friend')['sendStatus']);
-        $this->assertNull($response->jsonData('friend')['recieveStatus']);
+        $this->assertEquals($response->jsonData('friend')['sendStatus'], 'friends');
     }
 }

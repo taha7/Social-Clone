@@ -9,5 +9,6 @@ FIXME:
    ✔ when add friend after search in navbar it is sometimes return with wrong status @done(19-07-03 22:37)
 TODO:
    ☐ Upload Post with images
+   ☐ Make full registeration
    ☐ Make Profile page
-   ☐ Make a test for full control from user to friends
+   ✔ Make a test for full control from user to friends @done(19-07-04 13:00)
