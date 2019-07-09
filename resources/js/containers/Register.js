@@ -5,7 +5,11 @@ import RegisterForm from '../components/Register/RegisterForm/RegisterForm';
 import Validation from '../libraries/validation/validation';
 
 const rules = {
-	name: [ 'required', 'alpha_dash', 'max:255' ],
+	fname: [ 'required', 'alpha_dash', 'max:2' ],
+	lname: [ 'required', 'alpha_dash', 'max:2' ],
+	phone: [ 'required' ],
+	birth_date: [ 'required' ],
+	gender: [ 'required' ],
 	email: [ 'required', 'email', 'max:255' ],
 	password: [ 'required', 'alpha_dash', 'min:6', 'confirmed:password_confirmation:1' ],
 	password_confirmation: [ 'required', 'confirmed:password:1' ]
@@ -23,8 +27,12 @@ export default class Register extends Component {
 
 		this.state = {
 			user: {
-				name: '',
+				fname: '',
+				lname: '',
 				email: '',
+				phone: '',
+				birth_date: '',
+				gender: 'male',
 				password: '',
 				password_confirmation: ''
 			},
@@ -43,20 +51,22 @@ export default class Register extends Component {
 			[e.target.name]: rules[e.target.name]
 		});
 
-		if (Object.keys(keyError).length > 0) {
-			let errors = { ...this.state.errors };
-			errors[e.target.name] = keyError[e.target.name] || [];
-			this.setState({ errors });
-		}
-		else {
-			if (e.target.name === 'password' || e.target.name === 'passowrd_confirmation') {
-				let errors = { ...this.state.errors };
-				errors['password'] = [];
-				errors['password_confirmation'] = [];
-				this.setState({ errors });
-			}
-			else this.setState({ errors });
-		}
+		console.log(keyError.errors());
+
+		// if (Object.keys(keyError).length > 0) {
+		// 	let errors = { ...this.state.errors };
+		// 	errors[e.target.name] = keyError[e.target.name] || [];
+		// 	this.setState({ errors });
+		// }
+		// else {
+		// 	if (e.target.name === 'password' || e.target.name === 'passowrd_confirmation') {
+		// 		let errors = { ...this.state.errors };
+		// 		errors['password'] = [];
+		// 		errors['password_confirmation'] = [];
+		// 		this.setState({ errors });
+		// 	}
+		// 	else this.setState({ errors });
+		// }
 	}
 
 	submitForm(e) {

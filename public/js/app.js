@@ -83874,7 +83874,7 @@ var RegisterForm = function RegisterForm(props) {
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
     value: props.user.phone,
     onChange: props.onchange,
-    type: "number",
+    type: "text",
     className: 'form-control ' + (hasError('phone') ? 'is-invalid' : ''),
     name: "phone",
     placeholder: "Mobile Number"
@@ -83904,23 +83904,26 @@ var RegisterForm = function RegisterForm(props) {
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
     className: "form-check-input",
     type: "radio",
-    name: "inlineRadioOptions",
-    id: "inlineRadio1",
-    value: "option1"
+    name: "gender",
+    onChange: props.onchange,
+    id: "male",
+    value: "male",
+    defaultChecked: true
   }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
     className: "form-check-label",
-    for: "inlineRadio1"
+    htmlFor: "male"
   }, "Male")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "form-check form-check-inline"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
     className: "form-check-input",
     type: "radio",
-    name: "inlineRadioOptions",
-    id: "inlineRadio2",
-    value: "option2"
+    name: "gender",
+    onChange: props.onchange,
+    id: "female",
+    value: "female"
   }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
     className: "form-check-label",
-    for: "inlineRadio2"
+    htmlFor: "female"
   }, "Female")))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "form-group"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
@@ -84269,7 +84272,11 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 var rules = {
-  name: ['required', 'alpha_dash', 'max:255'],
+  fname: ['required', 'alpha_dash', 'max:2'],
+  lname: ['required', 'alpha_dash', 'max:2'],
+  phone: ['required'],
+  birth_date: ['required'],
+  gender: ['required'],
   email: ['required', 'email', 'max:255'],
   password: ['required', 'alpha_dash', 'min:6', 'confirmed:password_confirmation:1'],
   password_confirmation: ['required', 'confirmed:password:1']
@@ -84294,8 +84301,12 @@ function (_Component) {
     _this = _possibleConstructorReturn(this, _getPrototypeOf(Register).call(this, props));
     _this.state = {
       user: {
-        name: '',
+        fname: '',
+        lname: '',
         email: '',
+        phone: '',
+        birth_date: '',
+        gender: 'male',
         password: '',
         password_confirmation: ''
       },
@@ -84316,27 +84327,20 @@ function (_Component) {
         user: newUser
       });
       var keyError = new _libraries_validation_validation__WEBPACK_IMPORTED_MODULE_3__["default"](newUser, _defineProperty({}, e.target.name, rules[e.target.name]));
-
-      if (Object.keys(keyError).length > 0) {
-        var _errors = _objectSpread({}, this.state.errors);
-
-        _errors[e.target.name] = keyError[e.target.name] || [];
-        this.setState({
-          errors: _errors
-        });
-      } else {
-        if (e.target.name === 'password' || e.target.name === 'passowrd_confirmation') {
-          var _errors2 = _objectSpread({}, this.state.errors);
-
-          _errors2['password'] = [];
-          _errors2['password_confirmation'] = [];
-          this.setState({
-            errors: _errors2
-          });
-        } else this.setState({
-          errors: errors
-        });
-      }
+      console.log(keyError.errors()); // if (Object.keys(keyError).length > 0) {
+      // 	let errors = { ...this.state.errors };
+      // 	errors[e.target.name] = keyError[e.target.name] || [];
+      // 	this.setState({ errors });
+      // }
+      // else {
+      // 	if (e.target.name === 'password' || e.target.name === 'passowrd_confirmation') {
+      // 		let errors = { ...this.state.errors };
+      // 		errors['password'] = [];
+      // 		errors['password_confirmation'] = [];
+      // 		this.setState({ errors });
+      // 	}
+      // 	else this.setState({ errors });
+      // }
     }
   }, {
     key: "submitForm",
@@ -84441,78 +84445,57 @@ function () {
     this.object = object;
     this.rules = rules;
     this.isValid = true;
+    this.errorConfirmation = {};
     return this.validate();
   }
 
   _createClass(Validation, [{
+    key: "fails",
+    value: function fails() {
+      return !this.isValid;
+    }
+  }, {
+    key: "errors",
+    value: function errors() {
+      return this.errorConfirmation;
+    }
+  }, {
     key: "runFunction",
     value: function runFunction(func, value) {
-      var splits = func.split(':');
-      var functions = new _validationFunctions__WEBPACK_IMPORTED_MODULE_1__["default"]();
-
-      if (typeof functions[splits[0]] === 'function') {
-        var confirm = null;
-
-        if (splits.length === 1) {
-          confirm = functions[splits[0]](value);
-        }
-
-        if (splits.length === 2) {
-          //ex  confirm = this.max("ahmed", 5);
-          confirm = functions[splits[0]](value, splits[1]);
-        }
-
-        if (splits.length === 3) {
-          confirm = functions[splits[0]](value, this.object[splits[1]]);
-        }
-
-        return confirm;
-      }
-
-      return null;
+      var vs = new _validationFunctions__WEBPACK_IMPORTED_MODULE_1__["default"]();
+      return vs.testValueByFunction(func.split(':'), value);
+    }
+  }, {
+    key: "createMessages",
+    value: function createMessages(func, property) {
+      var messages = this.errorConfirmation[property] || [];
+      var message = _validationMessages__WEBPACK_IMPORTED_MODULE_0__["default"][func.split(':')[0]].replace(':attribute', property);
+      messages.push(message);
+      this.errorConfirmation[property] = messages;
     }
   }, {
     key: "validate",
     value: function validate() {
       var _this = this;
 
-      var errorConfirmation = {};
       Object.keys(this.object).forEach(function (property) {
         if (_this.rules.hasOwnProperty(property)) {
           _this.rules[property].forEach(function (func) {
             var confirm = _this.runFunction(func, _this.object[property]);
 
             if (confirm !== null && confirm === false) {
-              var messages = errorConfirmation[property] || [];
-              var message = _validationMessages__WEBPACK_IMPORTED_MODULE_0__["default"][func.split(':')[0]].replace(':attribute', property);
-              messages.push(message);
-              errorConfirmation[property] = messages;
+              _this.createMessages(func, property);
             }
           });
         }
       });
-      this.isValid = Object.keys(errorConfirmation).length > 0 ? false : true;
-      return errorConfirmation;
+      this.isValid = Object.keys(this.errorConfirmation).length > 0 ? false : true;
+      return this;
     }
   }]);
 
   return Validation;
-}(); // const user = {
-// 	name: 's]sssssss',
-// 	email: 'ssss.com',
-// 	password: '',
-// 	password_confirmation: ''
-// };
-// const rules = {
-// 	name: [ 'required', 'alpha_dash', 'max:5' ],
-// 	email: [ 'required', 'max:5', 'email' ]
-// };
-// let validation = new Validation();
-// let errors = validation.validate(user, rules);
-// if (!validation.isValid) {
-// 	console.log(errors);
-// }
-
+}();
 
 
 
@@ -84542,6 +84525,28 @@ function () {
   }
 
   _createClass(validationFunctions, [{
+    key: "testValueByFunction",
+    value: function testValueByFunction(splits, value) {
+      var confirm = null;
+
+      if (this.hasFunction(splits[0])) {
+        if (splits.length === 1) {
+          confirm = this[splits[0]](value);
+        }
+
+        if (splits.length === 2) {
+          confirm = this[splits[0]](value, splits[1]);
+        }
+      }
+
+      return confirm;
+    }
+  }, {
+    key: "hasFunction",
+    value: function hasFunction(functionName) {
+      return typeof this[functionName] === 'function';
+    }
+  }, {
     key: "alpha",
     value: function alpha(value) {
       var regex = /^[a-zA-Z]*$/;

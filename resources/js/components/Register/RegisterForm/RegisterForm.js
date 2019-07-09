@@ -54,7 +54,7 @@ const RegisterForm = props => {
 				<input
 					value={props.user.phone}
 					onChange={props.onchange}
-					type='number'
+					type='text'
 					className={'form-control ' + (hasError('phone') ? 'is-invalid' : '')}
 					name='phone'
 					placeholder='Mobile Number'
@@ -84,11 +84,13 @@ const RegisterForm = props => {
 						<input
 							className='form-check-input'
 							type='radio'
-							name='inlineRadioOptions'
-							id='inlineRadio1'
-							value='option1'
+							name='gender'
+							onChange={props.onchange}
+							id='male'
+							value='male'
+							defaultChecked
 						/>
-						<label className='form-check-label' for='inlineRadio1'>
+						<label className='form-check-label' htmlFor='male'>
 							Male
 						</label>
 					</div>
@@ -96,11 +98,12 @@ const RegisterForm = props => {
 						<input
 							className='form-check-input'
 							type='radio'
-							name='inlineRadioOptions'
-							id='inlineRadio2'
-							value='option2'
+							name='gender'
+							onChange={props.onchange}
+							id='female'
+							value='female'
 						/>
-						<label className='form-check-label' for='inlineRadio2'>
+						<label className='form-check-label' htmlFor='female'>
 							Female
 						</label>
 					</div>

@@ -1,4 +1,21 @@
 export default class validationFunctions {
+	testValueByFunction(splits, value) {
+		let confirm = null;
+		if (this.hasFunction(splits[0])) {
+			if (splits.length === 1) {
+				confirm = this[splits[0]](value);
+			}
+			if (splits.length === 2) {
+				confirm = this[splits[0]](value, splits[1]);
+			}
+		}
+		return confirm;
+	}
+
+	hasFunction(functionName) {
+		return typeof this[functionName] === 'function';
+	}
+
 	alpha(value) {
 		let regex = /^[a-zA-Z]*$/;
 		return regex.test(value);
