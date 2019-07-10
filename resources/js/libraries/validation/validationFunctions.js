@@ -1,4 +1,9 @@
 export default class validationFunctions {
+	constructor(object, property) {
+		this.object = object;
+		this.property = property;
+	}
+
 	testValueByFunction(splits, value) {
 		let confirm = null;
 		if (this.hasFunction(splits[0])) {
@@ -7,6 +12,9 @@ export default class validationFunctions {
 			}
 			if (splits.length === 2) {
 				confirm = this[splits[0]](value, splits[1]);
+			}
+			if (splits.length === 3) {
+				confirm = this[splits[0]](value, this.object[`${this.property}_confirmation`]);
 			}
 		}
 		return confirm;

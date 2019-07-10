@@ -83841,6 +83841,7 @@ var RegisterForm = function RegisterForm(props) {
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
     value: props.user.fname,
     onChange: props.onchange,
+    onBlur: props.onBlur,
     type: "text",
     className: 'form-control ' + (hasError('fname') ? 'is-invalid' : ''),
     name: "fname",
@@ -83852,6 +83853,7 @@ var RegisterForm = function RegisterForm(props) {
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
     value: props.user.lname,
     onChange: props.onchange,
+    onBlur: props.onBlur,
     type: "text",
     className: 'form-control ' + (hasError('lname') ? 'is-invalid' : ''),
     name: "lname",
@@ -83863,6 +83865,7 @@ var RegisterForm = function RegisterForm(props) {
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
     value: props.user.email,
     onChange: props.onchange,
+    onBlur: props.onBlur,
     type: "email",
     className: 'form-control ' + (hasError('email') ? 'is-invalid' : ''),
     name: "email",
@@ -83874,6 +83877,7 @@ var RegisterForm = function RegisterForm(props) {
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
     value: props.user.phone,
     onChange: props.onchange,
+    onBlur: props.onBlur,
     type: "text",
     className: 'form-control ' + (hasError('phone') ? 'is-invalid' : ''),
     name: "phone",
@@ -83888,6 +83892,7 @@ var RegisterForm = function RegisterForm(props) {
     id: "birth_date",
     value: props.user.birth_date,
     onChange: props.onchange,
+    onBlur: props.onBlur,
     type: "date",
     className: 'form-control ' + (hasError('birth_date') ? 'is-invalid' : ''),
     name: "birth_date"
@@ -83929,6 +83934,7 @@ var RegisterForm = function RegisterForm(props) {
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
     value: props.user.password,
     onChange: props.onchange,
+    onBlur: props.onPasswordBlur,
     name: "password",
     type: "password",
     className: 'form-control ' + (hasError('password') ? 'is-invalid' : ''),
@@ -83941,6 +83947,7 @@ var RegisterForm = function RegisterForm(props) {
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
     value: props.user.password_confirmation,
     onChange: props.onchange,
+    onBlur: props.onPasswordBlur,
     name: "password_confirmation",
     type: "password",
     className: 'form-control ' + (hasError('password_confirmation') ? 'is-invalid' : ''),
@@ -84278,11 +84285,14 @@ var rules = {
   birth_date: ['required'],
   gender: ['required'],
   email: ['required', 'email', 'max:255'],
-  password: ['required', 'alpha_dash', 'min:6', 'confirmed:password_confirmation:1'],
-  password_confirmation: ['required', 'confirmed:password:1']
+  password: ['required', 'alpha_dash', 'min:6', 'confirmed:password_confirmation:1']
 };
 var errors = {
-  name: [],
+  fname: [],
+  lname: [],
+  phone: [],
+  birth_date: [],
+  gender: [],
   email: [],
   password: [],
   password_confirmation: []
@@ -84314,33 +84324,43 @@ function (_Component) {
     };
     _this.submitForm = _this.submitForm.bind(_assertThisInitialized(_this));
     _this.handleChangeInput = _this.handleChangeInput.bind(_assertThisInitialized(_this));
+    _this.handleBlurInput = _this.handleBlurInput.bind(_assertThisInitialized(_this));
+    _this.handleBlurPassword = _this.handleBlurPassword.bind(_assertThisInitialized(_this));
     return _this;
   }
 
   _createClass(Register, [{
     key: "handleChangeInput",
     value: function handleChangeInput(e) {
-      var newUser = _objectSpread({}, this.state.user);
-
-      newUser[e.target.name] = e.target.value;
       this.setState({
-        user: newUser
+        user: _objectSpread({}, this.state.user, _defineProperty({}, e.target.name, e.target.value))
       });
-      var keyError = new _libraries_validation_validation__WEBPACK_IMPORTED_MODULE_3__["default"](newUser, _defineProperty({}, e.target.name, rules[e.target.name]));
-      console.log(keyError.errors()); // if (Object.keys(keyError).length > 0) {
-      // 	let errors = { ...this.state.errors };
-      // 	errors[e.target.name] = keyError[e.target.name] || [];
-      // 	this.setState({ errors });
-      // }
-      // else {
-      // 	if (e.target.name === 'password' || e.target.name === 'passowrd_confirmation') {
-      // 		let errors = { ...this.state.errors };
-      // 		errors['password'] = [];
-      // 		errors['password_confirmation'] = [];
-      // 		this.setState({ errors });
-      // 	}
-      // 	else this.setState({ errors });
-      // }
+    }
+  }, {
+    key: "handleBlurInput",
+    value: function handleBlurInput(e) {
+      var validator = new _libraries_validation_validation__WEBPACK_IMPORTED_MODULE_3__["default"](_objectSpread({}, this.state.user), _defineProperty({}, e.target.name, rules[e.target.name] || []));
+
+      var errors = _objectSpread({}, this.state.errors);
+
+      errors[e.target.name] = validator.fails() ? validator.errors()[e.target.name] : [];
+      this.setState({
+        errors: errors
+      });
+    }
+  }, {
+    key: "handleBlurPassword",
+    value: function handleBlurPassword(e) {
+      var validator = new _libraries_validation_validation__WEBPACK_IMPORTED_MODULE_3__["default"](_objectSpread({}, this.state.user), {
+        password: rules['password']
+      });
+
+      var errors = _objectSpread({}, this.state.errors);
+
+      errors['password'] = validator.fails() ? validator.errors()['password'] : [];
+      this.setState({
+        errors: errors
+      });
     }
   }, {
     key: "submitForm",
@@ -84379,6 +84399,8 @@ function (_Component) {
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Register_RegisterForm_RegisterForm__WEBPACK_IMPORTED_MODULE_2__["default"], {
         user: this.state.user,
         onchange: this.handleChangeInput,
+        onBlur: this.handleBlurInput,
+        onPasswordBlur: this.handleBlurPassword,
         onsubmit: this.submitForm,
         errors: this.state.errors
       }))))));
@@ -84461,9 +84483,9 @@ function () {
     }
   }, {
     key: "runFunction",
-    value: function runFunction(func, value) {
-      var vs = new _validationFunctions__WEBPACK_IMPORTED_MODULE_1__["default"]();
-      return vs.testValueByFunction(func.split(':'), value);
+    value: function runFunction(func, object, property) {
+      var vs = new _validationFunctions__WEBPACK_IMPORTED_MODULE_1__["default"](object, property);
+      return vs.testValueByFunction(func.split(':'), object[property]);
     }
   }, {
     key: "createMessages",
@@ -84481,7 +84503,7 @@ function () {
       Object.keys(this.object).forEach(function (property) {
         if (_this.rules.hasOwnProperty(property)) {
           _this.rules[property].forEach(function (func) {
-            var confirm = _this.runFunction(func, _this.object[property]);
+            var confirm = _this.runFunction(func, _this.object, property);
 
             if (confirm !== null && confirm === false) {
               _this.createMessages(func, property);
@@ -84520,8 +84542,11 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 var validationFunctions =
 /*#__PURE__*/
 function () {
-  function validationFunctions() {
+  function validationFunctions(object, property) {
     _classCallCheck(this, validationFunctions);
+
+    this.object = object;
+    this.property = property;
   }
 
   _createClass(validationFunctions, [{
@@ -84536,6 +84561,10 @@ function () {
 
         if (splits.length === 2) {
           confirm = this[splits[0]](value, splits[1]);
+        }
+
+        if (splits.length === 3) {
+          confirm = this[splits[0]](value, this.object["".concat(this.property, "_confirmation")]);
         }
       }
 

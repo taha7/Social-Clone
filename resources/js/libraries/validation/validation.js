@@ -19,9 +19,9 @@ export default class Validation {
 		return this.errorConfirmation;
 	}
 
-	runFunction(func, value) {
-		let vs = new validationFunctions();
-		return vs.testValueByFunction(func.split(':'), value);
+	runFunction(func, object, property) {
+		let vs = new validationFunctions(object, property);
+		return vs.testValueByFunction(func.split(':'), object[property]);
 	}
 
 	createMessages(func, property) {
@@ -35,7 +35,7 @@ export default class Validation {
 		Object.keys(this.object).forEach(property => {
 			if (this.rules.hasOwnProperty(property)) {
 				this.rules[property].forEach(func => {
-					let confirm = this.runFunction(func, this.object[property]);
+					let confirm = this.runFunction(func, this.object, property);
 					if (confirm !== null && confirm === false) {
 						this.createMessages(func, property);
 					}

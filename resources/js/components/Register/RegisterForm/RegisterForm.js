@@ -16,6 +16,7 @@ const RegisterForm = props => {
 					<input
 						value={props.user.fname}
 						onChange={props.onchange}
+						onBlur={props.onBlur}
 						type='text'
 						className={'form-control ' + (hasError('fname') ? 'is-invalid' : '')}
 						name='fname'
@@ -28,6 +29,7 @@ const RegisterForm = props => {
 					<input
 						value={props.user.lname}
 						onChange={props.onchange}
+						onBlur={props.onBlur}
 						type='text'
 						className={'form-control ' + (hasError('lname') ? 'is-invalid' : '')}
 						name='lname'
@@ -42,6 +44,7 @@ const RegisterForm = props => {
 				<input
 					value={props.user.email}
 					onChange={props.onchange}
+					onBlur={props.onBlur}
 					type='email'
 					className={'form-control ' + (hasError('email') ? 'is-invalid' : '')}
 					name='email'
@@ -54,6 +57,7 @@ const RegisterForm = props => {
 				<input
 					value={props.user.phone}
 					onChange={props.onchange}
+					onBlur={props.onBlur}
 					type='text'
 					className={'form-control ' + (hasError('phone') ? 'is-invalid' : '')}
 					name='phone'
@@ -69,6 +73,7 @@ const RegisterForm = props => {
 					id='birth_date'
 					value={props.user.birth_date}
 					onChange={props.onchange}
+					onBlur={props.onBlur}
 					type='date'
 					className={'form-control ' + (hasError('birth_date') ? 'is-invalid' : '')}
 					name='birth_date'
@@ -115,6 +120,7 @@ const RegisterForm = props => {
 				<input
 					value={props.user.password}
 					onChange={props.onchange}
+					onBlur={props.onPasswordBlur}
 					name='password'
 					type='password'
 					className={'form-control ' + (hasError('password') ? 'is-invalid' : '')}
@@ -128,6 +134,7 @@ const RegisterForm = props => {
 				<input
 					value={props.user.password_confirmation}
 					onChange={props.onchange}
+					onBlur={props.onPasswordBlur}
 					name='password_confirmation'
 					type='password'
 					className={

@@ -11,12 +11,15 @@ const rules = {
 	birth_date: [ 'required' ],
 	gender: [ 'required' ],
 	email: [ 'required', 'email', 'max:255' ],
-	password: [ 'required', 'alpha_dash', 'min:6', 'confirmed:password_confirmation:1' ],
-	password_confirmation: [ 'required', 'confirmed:password:1' ]
+	password: [ 'required', 'alpha_dash', 'min:6', 'confirmed:password_confirmation:1' ]
 };
 
 const errors = {
-	name: [],
+	fname: [],
+	lname: [],
+	phone: [],
+	birth_date: [],
+	gender: [],
 	email: [],
 	password: [],
 	password_confirmation: []
@@ -40,33 +43,32 @@ export default class Register extends Component {
 		};
 		this.submitForm = this.submitForm.bind(this);
 		this.handleChangeInput = this.handleChangeInput.bind(this);
+		this.handleBlurInput = this.handleBlurInput.bind(this);
+		this.handleBlurPassword = this.handleBlurPassword.bind(this);
 	}
 
 	handleChangeInput(e) {
-		const newUser = { ...this.state.user };
-		newUser[e.target.name] = e.target.value;
-		this.setState({ user: newUser });
+		this.setState({ user: { ...this.state.user, [e.target.name]: e.target.value } });
+	}
 
-		let keyError = new Validation(newUser, {
-			[e.target.name]: rules[e.target.name]
-		});
+	handleBlurInput(e) {
+		let validator = new Validation(
+			{ ...this.state.user },
+			{
+				[e.target.name]: rules[e.target.name] || []
+			}
+		);
+		let errors = { ...this.state.errors };
+		errors[e.target.name] = validator.fails() ? validator.errors()[e.target.name] : [];
 
-		console.log(keyError.errors());
+		this.setState({ errors });
+	}
 
-		// if (Object.keys(keyError).length > 0) {
-		// 	let errors = { ...this.state.errors };
-		// 	errors[e.target.name] = keyError[e.target.name] || [];
-		// 	this.setState({ errors });
-		// }
-		// else {
-		// 	if (e.target.name === 'password' || e.target.name === 'passowrd_confirmation') {
-		// 		let errors = { ...this.state.errors };
-		// 		errors['password'] = [];
-		// 		errors['password_confirmation'] = [];
-		// 		this.setState({ errors });
-		// 	}
-		// 	else this.setState({ errors });
-		// }
+	handleBlurPassword(e) {
+		let validator = new Validation({ ...this.state.user }, { password: rules['password'] });
+		let errors = { ...this.state.errors };
+		errors['password'] = validator.fails() ? validator.errors()['password'] : [];
+		this.setState({ errors });
 	}
 
 	submitForm(e) {
@@ -98,6 +100,8 @@ export default class Register extends Component {
 								<RegisterForm
 									user={this.state.user}
 									onchange={this.handleChangeInput}
+									onBlur={this.handleBlurInput}
+									onPasswordBlur={this.handleBlurPassword}
 									onsubmit={this.submitForm}
 									errors={this.state.errors}
 								/>
