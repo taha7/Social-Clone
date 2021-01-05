@@ -12,7 +12,7 @@
     "devDependencies": {
         "@babel/preset-es2017": "^7.0.0-beta.53",
         "@babel/preset-react": "^7.0.0",
-        "axios": "^0.18.0",
+        "axios": "^0.21.1",
         "babel-preset-latest": "^6.24.1",
         "babel-preset-react": "^6.23.0",
         "bootstrap": "^4.0.0",
